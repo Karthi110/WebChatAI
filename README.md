@@ -2,9 +2,9 @@
 ## TODO
 - [✅] Get nessary API keys
 - [✅] Hook up backend for chat completion
-- [] Connect Drizzle orm
-- [] Determine schema
-- [] Connect Database with Neon.tech
+- [✅] Connect Drizzle orm
+- [✅] Determine schema
+- [✅] Connect Database with Neon.tech
 - [] Connect Auth with Clerk
 - [] create Dashboard
 - [] display webpage of url given using iframe
