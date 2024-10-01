@@ -1,6 +1,7 @@
 # WebChatAI
 ## TODO
-- [] Get nessary API keys
+- [✅] Get nessary API keys
+- [✅] Hook up backend for chat completion
 - [] Connect Drizzle orm
 - [] Determine schema
 - [] Connect Database with Neon.tech
