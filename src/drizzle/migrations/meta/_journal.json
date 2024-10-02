@@ -8,6 +8,13 @@
       "when": 1727776552169,
       "tag": "0000_small_firestar",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1727856262917,
+      "tag": "0001_sleepy_proteus",
+      "breakpoints": true
     }
   ]
 }
