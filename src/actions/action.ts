@@ -9,9 +9,9 @@ import { compile } from "html-to-text";
 export const vectorizeData = async (url: string) => {
   const compiledConvert = compile({ wordwrap: false }); // returns (text: string) => string;
 
-  const loader = new RecursiveUrlLoader(url, {
-    extractor: compiledConvert,
-    maxDepth: 1,
+  const loader = new CheerioWebBaseLoader(url, {
+    // extractor: compiledConvert,
+    // maxDepth: 1,
   });
   const docs = await loader.load();
   const splitter = new RecursiveCharacterTextSplitter({

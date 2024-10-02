@@ -3,8 +3,10 @@
 import { useChat } from "ai/react";
 import ReactMarkdown from "react-markdown";
 
-export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+export default function Chat({ url }: { url: string }) {
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    body: { url },
+  });
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
       {messages.map((m) => (

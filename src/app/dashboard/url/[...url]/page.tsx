@@ -35,7 +35,7 @@ const page = async ({ params }: PageProps) => {
 
   return (
     <div>
-      <Chat />
+      <Chat url={reconstructedUrl} />
     </div>
   );
 };
