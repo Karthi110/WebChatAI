@@ -1,5 +1,9 @@
-import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
+import { vectorizeData } from "@/actions/action";
+import Chat from "@/components/chat";
+import { RecursiveUrlLoader } from "@langchain/community/document_loaders/web/recursive_url";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import React from "react";
+import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
 
 interface PageProps {
   params: {
@@ -14,15 +18,26 @@ function reconstructUrl({ url }: { url: string[] }) {
   return decodeComponents.join("/");
 }
 
-const UrlPage = async ({ params }: PageProps) => {
+const page = async ({ params }: PageProps) => {
   const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
+  // await vectorizeData(reconstructedUrl);
+  // const loader = new CheerioWebBaseLoader("https://ui.shadcn.com/docs", {
+  //   // extractor: compiledConvert,
+  //   // maxDepth: 1,
+  // });
+  // const docs = await loader.load();
+  // const splitter = new RecursiveCharacterTextSplitter({
+  //   chunkOverlap: 50,
+  //   chunkSize: 1000,
+  // });
 
-  const loader = new CheerioWebBaseLoader(reconstructedUrl);
-  const docs = await loader.load();
-  //   console.log(docs[0].pageContent);
+  // const doc_chunk = await splitter.splitDocuments(docs);
 
-  console.log(reconstructedUrl);
-  return <div>UrlPage</div>;
+  return (
+    <div>
+      <Chat />
+    </div>
+  );
 };
 
-export default UrlPage;
+export default page;
