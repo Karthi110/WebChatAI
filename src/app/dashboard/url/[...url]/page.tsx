@@ -4,7 +4,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { vectorizeData } from "@/drizzle/action";
 
 interface PageProps {
   params: {
@@ -21,7 +20,6 @@ function reconstructUrl({ url }: { url: string[] }) {
 
 const page = async ({ params }: PageProps) => {
   const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
-  await vectorizeData(reconstructedUrl);
 
   return (
     <ResizablePanelGroup className="flex h-full" direction="horizontal">

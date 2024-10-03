@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +17,9 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const UrlDialog = () => {
+  const [url, setUrl] = useState<string>("");
   const router = useRouter();
+
   const { mutate: createUrl, isPending } = useMutation({
     mutationFn: async () => await vectorizeData(url),
     onSuccess: () => {
@@ -26,7 +28,7 @@ const UrlDialog = () => {
     },
     onError: () => toast.error("Failed to vectorize Url"),
   });
-  const [url, setUrl] = useState<string>("");
+
   if (isPending)
     return (
       <div className="h-full w-full backdrop-blur-sm flex items-center justify-center absolute inset-0 z-50">
@@ -34,6 +36,7 @@ const UrlDialog = () => {
         vectorizing url...
       </div>
     );
+
   return (
     <Dialog>
       <DialogTrigger asChild>
