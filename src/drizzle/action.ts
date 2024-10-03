@@ -1,41 +1,53 @@
 "use server";
 import { randomUUID } from "crypto";
 import { db } from "./db";
-import { indexedUrls, message, newUrl, newUser, user } from "./schema";
+import { indexedUrls, newUrl, newUser, user } from "./schema";
 import { eq } from "drizzle-orm";
 import { pinecone, PINECONE_INDEX } from "@/lib/pinecone";
-import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
+import { RecursiveUrlLoader } from "@langchain/community/document_loaders/web/recursive_url";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { compile } from "html-to-text";
 
 // AI ACTION
+
 export const vectorizeData = async (url: string) => {
-  const isUrlAlreadyIndexed = await findIndexedUrl(url);
-  if (!isUrlAlreadyIndexed.indexed) {
-    const loader = new CheerioWebBaseLoader(url);
-    const docs = await loader.load();
-    const splitter = new RecursiveCharacterTextSplitter({
-      chunkOverlap: 50,
-      chunkSize: 1000,
-    });
+  try {
+    const isUrlAlreadyIndexed = await findIndexedUrl(url);
+    if (!isUrlAlreadyIndexed.indexed) {
+      await createIndexedUrl({ url: url });
+      const compiledConvert = compile({ wordwrap: false }); // returns (text: string) => string;
 
-    const doc_chunk = await splitter.splitDocuments(docs);
+      const loader = new RecursiveUrlLoader(url, {
+        extractor: compiledConvert,
+        maxDepth: 0,
+      });
 
-    const embeddings = new OpenAIEmbeddings({
-      model: "text-embedding-3-small",
-    });
+      const docs = await loader.load();
+      const splitter = new RecursiveCharacterTextSplitter({
+        chunkOverlap: 50,
+        chunkSize: 300,
+      });
 
-    const pineconeIndex = pinecone.index(PINECONE_INDEX);
+      const doc_chunk = await splitter.splitDocuments(docs);
 
-    const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-      pineconeIndex,
-      namespace: url,
-    });
-    await vectorStore.addDocuments(doc_chunk);
+      const embeddings = new OpenAIEmbeddings({
+        model: "text-embedding-3-small",
+      });
+
+      const pineconeIndex = pinecone.index(PINECONE_INDEX);
+
+      const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+        pineconeIndex,
+        namespace: url,
+      });
+      await vectorStore.addDocuments(doc_chunk);
+    }
+    return;
+  } catch (error) {
+    return new Error("Failed to vectorize data");
   }
-
-  return;
 };
 
 // USER ACTIONS

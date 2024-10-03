@@ -1,11 +1,10 @@
 "use client";
 
 import { useChat } from "ai/react";
-import ReactMarkdown from "react-markdown";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Send, Trash } from "lucide-react";
 import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
 
 export default function Chat({ url }: { url: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -20,17 +19,39 @@ export default function Chat({ url }: { url: string }) {
         </Button>
       </div>
       <div className="h-full max-h-[calc(100vh-3.5rem-1rem-8rem)] overflow-y-auto text-start">
-        messages goes here.
+        {messages.length ? (
+          <div>
+            {messages.map((m, i) => (
+              <div key={i} className="flex flex-col">
+                <p>
+                  {m.role}:{m.content}
+                </p>
+                <span className="text-xs">{m.createdAt?.toDateString()}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div>Get started with typing</div>
+        )}
       </div>
       <div className="relative w-full">
-        <Textarea rows={3} placeholder="start chatting...." autoFocus />
-        <Button
-          variant="outline"
-          size="iconSm"
-          className="absolute bottom-2 right-2"
-        >
-          <Send className="size-4" />
-        </Button>
+        <form onSubmit={handleSubmit}>
+          <Input
+            // rows={3}
+            placeholder="start chatting...."
+            autoFocus
+            value={input}
+            onChange={handleInputChange}
+          />
+          <Button
+            variant="outline"
+            size="iconSm"
+            className="absolute bottom-2 right-2"
+            type="submit"
+          >
+            <Send className="size-4" />
+          </Button>
+        </form>
       </div>
     </div>
   );
