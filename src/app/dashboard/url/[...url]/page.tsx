@@ -4,6 +4,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { vectorizeData } from "@/drizzle/action";
 
 interface PageProps {
   params: {
@@ -20,6 +21,7 @@ function reconstructUrl({ url }: { url: string[] }) {
 
 const page = async ({ params }: PageProps) => {
   const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
+  await vectorizeData(reconstructedUrl);
 
   return (
     <ResizablePanelGroup className="flex h-full" direction="horizontal">
@@ -39,7 +41,7 @@ const page = async ({ params }: PageProps) => {
       >
         <iframe
           // TODO:add reconstructed url
-          src="https://ui.shadcn.com/docs/components/resizable"
+          src={reconstructedUrl}
           height="100%"
           width="100%"
           title="website iframe"

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Recursive } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
+import Provider from "@/components/provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const font = Recursive({ subsets: ["latin"] });
 
@@ -18,8 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={font.className}>
-        <Navbar />
-        <main className="bg-secondary">{children}</main>
+        <Provider>
+          <Navbar />
+          <main className="bg-secondary">{children}</main>
+          <Toaster position="top-center" richColors />
+        </Provider>
       </body>
     </html>
   );
