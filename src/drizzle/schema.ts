@@ -53,7 +53,7 @@ export const message = pgTable("message", {
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 
-type newUser = typeof user.$inferInsert;
-type newUrl = typeof indexedUrls.$inferInsert;
-type newMessages = typeof messages.$inferInsert;
-type newMessage = typeof message.$inferInsert;
+export type newUser = typeof user.$inferInsert;
+export type newUrl = typeof indexedUrls.$inferInsert;
+export type newMessages = typeof messages.$inferInsert;
+export type newMessage = typeof message.$inferInsert;

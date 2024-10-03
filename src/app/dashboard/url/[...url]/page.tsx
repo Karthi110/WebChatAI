@@ -1,9 +1,9 @@
-import { vectorizeData } from "@/actions/action";
 import Chat from "@/components/chat";
-import { RecursiveUrlLoader } from "@langchain/community/document_loaders/web/recursive_url";
-import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import React from "react";
-import { CheerioWebBaseLoader } from "@langchain/community/document_loaders/web/cheerio";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable";
 
 interface PageProps {
   params: {
@@ -20,23 +20,41 @@ function reconstructUrl({ url }: { url: string[] }) {
 
 const page = async ({ params }: PageProps) => {
   const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
-  // await vectorizeData(reconstructedUrl);
-  // const loader = new CheerioWebBaseLoader("https://ui.shadcn.com/docs", {
-  //   // extractor: compiledConvert,
-  //   // maxDepth: 1,
-  // });
-  // const docs = await loader.load();
-  // const splitter = new RecursiveCharacterTextSplitter({
-  //   chunkOverlap: 50,
-  //   chunkSize: 1000,
-  // });
-
-  // const doc_chunk = await splitter.splitDocuments(docs);
 
   return (
-    <div>
-      <Chat url={reconstructedUrl} />
-    </div>
+    <ResizablePanelGroup className="flex h-full" direction="horizontal">
+      <ResizablePanel
+        defaultSize={5}
+        minSize={5}
+        maxSize={5}
+        className="rounded-r-md"
+      >
+        sidebar
+      </ResizablePanel>
+      <ResizableHandle />
+      <ResizablePanel
+        minSize={40}
+        defaultSize={45}
+        className="h-[calc(100vh-3.5rem)] rounded-md border"
+      >
+        <iframe
+          // TODO:add reconstructed url
+          src="https://ui.shadcn.com/docs/components/resizable"
+          height="100%"
+          width="100%"
+          title="website iframe"
+          className="resize-none"
+        ></iframe>
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel
+        minSize={40}
+        defaultSize={45}
+        className="rounded-md border"
+      >
+        <Chat url={reconstructedUrl} />
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 
