@@ -24,7 +24,7 @@ export const user = pgTable("user", {
 export const indexedUrls = pgTable("indexedUrls", {
   id: serial("id").primaryKey().notNull().unique(),
   url: text("url").notNull().unique(),
-  createdAt: timestamp("created_at"),
+  createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 
@@ -49,7 +49,7 @@ export const message = pgTable("message", {
   messagesId: integer("messages_id").references(() => messages.id, {
     onDelete: "cascade",
   }),
-  createdAt: timestamp("created_at"),
+  createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 

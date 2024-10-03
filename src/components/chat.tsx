@@ -4,12 +4,12 @@ import { useChat } from "ai/react";
 import { Button } from "./ui/button";
 import { Send, Trash } from "lucide-react";
 import { Textarea } from "./ui/textarea";
-import { Input } from "./ui/input";
 
 export default function Chat({ url }: { url: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     body: { url },
   });
+
   return (
     <div className="flex flex-col items-center h-full p-2 gap-1.5">
       <div className="h-9 flex items-center justify-between w-full border-b">
@@ -23,9 +23,7 @@ export default function Chat({ url }: { url: string }) {
           <div>
             {messages.map((m, i) => (
               <div key={i} className="flex flex-col">
-                <p>
-                  {m.role}:{m.content}
-                </p>
+                <p>{JSON.stringify(m)}</p>
                 <span className="text-xs">{m.createdAt?.toDateString()}</span>
               </div>
             ))}
@@ -36,8 +34,8 @@ export default function Chat({ url }: { url: string }) {
       </div>
       <div className="relative w-full">
         <form onSubmit={handleSubmit}>
-          <Input
-            // rows={3}
+          <Textarea
+            rows={3}
             placeholder="start chatting...."
             autoFocus
             value={input}
