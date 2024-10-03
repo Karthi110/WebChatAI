@@ -24,9 +24,9 @@ const page = async ({ params }: PageProps) => {
   return (
     <ResizablePanelGroup className="flex h-full" direction="horizontal">
       <ResizablePanel
-        defaultSize={5}
-        minSize={5}
-        maxSize={5}
+        defaultSize={10}
+        minSize={10}
+        maxSize={10}
         className="rounded-r-md"
       >
         sidebar

@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={font.className}>
         <Navbar />
-        <main className="px-4 bg-secondary">{children}</main>
+        <main className="bg-secondary">{children}</main>
       </body>
     </html>
   );
