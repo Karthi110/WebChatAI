@@ -24,6 +24,7 @@ export async function POST(req: Request) {
   const query = messages[messages.length - 1].content;
   const results = await vectorStore.similaritySearch(query);
   console.log(query);
+  console.log(url);
 
   const result = await streamText({
     model: openai("gpt-3.5-turbo-0125"),

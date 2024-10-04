@@ -35,7 +35,6 @@ export default function Chat({ url }: { url: string }) {
             onChange={handleInputChange}
           />
           <Button
-            variant="outline"
             size="iconSm"
             className="absolute bottom-2 right-2"
             type="submit"

@@ -15,11 +15,18 @@ function reconstructUrl({ url }: { url: string[] }) {
   const decodeComponents = url.map((component) =>
     decodeURIComponent(component)
   );
-  return decodeComponents.join("/");
+  const CompleteUrl = decodeComponents.join("/");
+  const lastSlashIndex = CompleteUrl.lastIndexOf("/");
+  const baseUrl = CompleteUrl.substring(0, lastSlashIndex);
+  const loaderType = CompleteUrl.substring(lastSlashIndex + 1);
+  return { baseUrl, loaderType };
 }
 
 const page = async ({ params }: PageProps) => {
-  const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
+  const { baseUrl, loaderType } = reconstructUrl({
+    url: params.url as string[],
+  });
+  console.log(loaderType, baseUrl);
 
   return (
     <ResizablePanelGroup className="flex h-full" direction="horizontal">
@@ -39,7 +46,7 @@ const page = async ({ params }: PageProps) => {
       >
         <iframe
           // TODO:add reconstructed url
-          src={reconstructedUrl}
+          src={baseUrl}
           height="100%"
           width="100%"
           title="website iframe"
@@ -52,7 +59,7 @@ const page = async ({ params }: PageProps) => {
         defaultSize={45}
         className="rounded-md border"
       >
-        <Chat url={reconstructedUrl} />
+        <Chat url={baseUrl + loaderType} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );

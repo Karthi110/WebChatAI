@@ -1,8 +1,7 @@
 "use server";
-import { randomUUID } from "crypto";
 import { db } from "./db";
-import { indexedUrls, newUrl, newUser, user } from "./schema";
-import { eq } from "drizzle-orm";
+import { chat, indexedUrls, newChat, newUrl } from "./schema";
+import { and, eq } from "drizzle-orm";
 import { pinecone, PINECONE_INDEX } from "@/lib/pinecone";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
@@ -12,18 +11,19 @@ import { compile } from "html-to-text";
 
 // AI ACTION
 
-export const vectorizeData = async (url: string) => {
+export const vectorizeData = async (url: string, loaderType: string) => {
   try {
+    const fullUrl = url + loaderType;
     //fetching url from indexedurls
-    const isUrlAlreadyIndexed = await findIndexedUrl(url);
+    const isUrlAlreadyIndexed = await findIndexedUrl(fullUrl);
 
     // if found continue dont re-vectorize if not found vectorize
     if (!isUrlAlreadyIndexed.indexed) {
       // add url to the indexedurls
-      await createIndexedUrl({ url: url });
+      await createIndexedUrl({ url: fullUrl });
 
       // reconstructing url for vector namespace
-      const reconstructedUrl = url.replace("https://", "https:/");
+      const reconstructedUrl = fullUrl.replace("https://", "https:/");
       const compiledConvert = compile({ wordwrap: false }); // returns (text: string) => string;
 
       // Loading webbase document from url
@@ -66,23 +66,6 @@ export const vectorizeData = async (url: string) => {
 };
 
 // USER ACTIONS
-export const upsertUser = async (data: newUser) => {
-  try {
-    // TODO:wire up with clerk id
-    const newId = randomUUID();
-    await db
-      .insert(user)
-      .values({
-        name: "test",
-        email: "fake@gmail.com",
-        tier: "free",
-      })
-      .onConflictDoUpdate({ target: user.email, set: { id: newId } });
-    return { message: "User Created!" };
-  } catch (error) {
-    return new Error("Failed to create User.");
-  }
-};
 
 // INDEXED URL ACTIONS
 export const createIndexedUrl = async (data: newUrl) => {
@@ -102,4 +85,35 @@ export const findIndexedUrl = async (url: string) => {
     return { indexed: true, data: data };
   }
   return { indexed: false, data: null };
+};
+
+//Messages
+export const findMessages = async ({
+  userId,
+  urlId,
+}: {
+  userId: string;
+  urlId: string;
+}) => {
+  const chats = await db.query.chat.findFirst({
+    where: and(eq(chat?.userId, userId), eq(chat?.urlId, urlId)),
+  });
+  // make infinite query for message
+  return "has";
+};
+
+export const createMessages = async (data: newChat) => {
+  try {
+    const existingMessages = await findMessages({
+      urlId: data.urlId!,
+      userId: data.userId,
+    });
+    if (existingMessages) {
+      return { message: "chat room already exists" };
+    }
+    await db.insert(chat).values(data);
+    return { message: "Chat room created" };
+  } catch (error) {
+    return new Error("Failed to create chat room");
+  }
 };

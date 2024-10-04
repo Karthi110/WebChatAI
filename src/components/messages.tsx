@@ -19,15 +19,6 @@ const Messages = ({ messages }: PageProps) => {
           />
         ))
       ) : (
-        // <>
-        //   <Message content="user" isUserMessage={true} />
-        //   <Message content="robor" isUserMessage={false} />
-        //   <Message content="robor" isUserMessage={false} />
-        //   <Message content="robor" isUserMessage={false} />
-        //   <Message content="robor" isUserMessage={false} />
-        //   <Message content="robor" isUserMessage={false} />
-        //   <Message content="robor" isUserMessage={true} />
-        // </>
         <div className="flex-1 flex flex-col items-center justify-center gap-2 h-full">
           <MessagesSquare className="size-8 text-blue-500" />
           <h3 className="font-semibold text-xl">Your&apos;e all set!</h3>

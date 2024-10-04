@@ -6,15 +6,17 @@ import {
   pgEnum,
   integer,
   uuid,
+  char,
 } from "drizzle-orm/pg-core";
 
 export const tierEnum = pgEnum("tier", ["free", "standard", "plus"]);
 
 export const user = pgTable("user", {
-  id: uuid("id").primaryKey().defaultRandom().notNull().unique(),
+  id: text("id").primaryKey().notNull().unique(),
   name: text("name"),
   email: text("email").notNull().unique(),
-  tier: tierEnum("tier"),
+  imageUrl: text("image_url"),
+  tier: tierEnum("tier").default("free"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => new Date())
@@ -22,16 +24,20 @@ export const user = pgTable("user", {
 });
 
 export const indexedUrls = pgTable("indexedUrls", {
-  id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
+  id: uuid("id").defaultRandom().primaryKey().notNull().unique(),
   url: text("url").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 
-export const messages = pgTable("messages", {
+export const chat = pgTable("chat", {
   id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
-  urlId: integer("url_id").references(() => indexedUrls.id),
-  userId: uuid("user_id")
+  chatName: text("chat_name"),
+  chatImage: text("chat_image"),
+  urlId: uuid("url_id")
+    .references(() => indexedUrls.id)
+    .notNull(),
+  userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -46,7 +52,7 @@ export const message = pgTable("message", {
   id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
   body: text("body"),
   role: roleEnum("role"),
-  messagesId: integer("messages_id").references(() => messages.id, {
+  chatId: uuid("chat_id").references(() => chat.id, {
     onDelete: "cascade",
   }),
   createdAt: timestamp("created_at").defaultNow(),
@@ -55,5 +61,5 @@ export const message = pgTable("message", {
 
 export type newUser = typeof user.$inferInsert;
 export type newUrl = typeof indexedUrls.$inferInsert;
-export type newMessages = typeof messages.$inferInsert;
+export type newChat = typeof chat.$inferInsert;
 export type newMessage = typeof message.$inferInsert;

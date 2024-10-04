@@ -2,6 +2,15 @@ import React from "react";
 import { Button, buttonVariants } from "./ui/button";
 import MaxWidthWrapper from "./max-width-wrapper";
 import Link from "next/link";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  ClerkLoading,
+  ClerkLoaded,
+} from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
@@ -38,14 +47,39 @@ const Navbar = () => {
                   Pricing
                 </Link>
               </li>
-              <li>
-                <Button size="sm">Login</Button>
-              </li>
-              <li>
-                <Button variant="outline" size="sm">
-                  Signup
-                </Button>
-              </li>
+              <ClerkLoading>
+                <li>
+                  <Button size="sm">Sign in</Button>
+                </li>
+                <li>
+                  <Button variant="outline" size="sm">
+                    Sign up
+                  </Button>
+                </li>
+              </ClerkLoading>
+              <ClerkLoaded>
+                <SignedOut>
+                  <li>
+                    <Button size="sm" asChild>
+                      <SignInButton
+                        mode="modal"
+                        fallbackRedirectUrl={"/dashboard"}
+                      />
+                    </Button>
+                  </li>
+                  <li>
+                    <Button variant="outline" size="sm" asChild>
+                      <SignUpButton
+                        mode="modal"
+                        signInFallbackRedirectUrl={"/auth-callback"}
+                      />
+                    </Button>
+                  </li>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </ClerkLoaded>
             </ul>
           </aside>
         </div>
