@@ -9,22 +9,33 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Lock, Plus } from "lucide-react";
 import { Input } from "./ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { vectorizeData } from "@/drizzle/action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+} from "@/components/ui/select";
 
-const UrlDialog = () => {
+type Loaders = "S" | "R";
+const UrlDialog = ({ text }: { text?: string }) => {
   const [url, setUrl] = useState<string>("");
+  const [loader, setLoader] = useState<Loaders>("S");
   const router = useRouter();
 
   const { mutate: createUrl, isPending } = useMutation({
-    mutationFn: async () => await vectorizeData(url),
+    mutationFn: async () => await vectorizeData(url, loader),
     onSuccess: () => {
       toast.success("Url vectorized!");
-      router.push(`/dashboard/url/${url}`);
+      router.push(`/dashboard/chat/${url}/${loader}`);
     },
     onError: () => toast.error("Failed to vectorize Url"),
   });
@@ -40,9 +51,9 @@ const UrlDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button size={text ? "sm" : "iconSm"}>
           <Plus className="size-4 mr-0.5" />
-          Create a new chat.
+          {text ? text : null}
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -59,6 +70,31 @@ const UrlDialog = () => {
           required
           type="url"
         />
+        <DialogDescription>Select the type of Loader. </DialogDescription>
+        <Select
+          defaultValue={loader}
+          onValueChange={(e) => {
+            setLoader(e as Loaders);
+            console.log(loader);
+          }}
+        >
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Select load type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Loaders</SelectLabel>
+              <SelectItem value="S">Single Page</SelectItem>
+              <SelectItem value="R" disabled>
+                Multiple Pages
+                <span className="text-xs flex items-center gap-0.5">
+                  <Lock className="size-3" />
+                  paid plans only.
+                </span>
+              </SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
         <Button onClick={() => createUrl()}>create</Button>
       </DialogContent>
     </Dialog>

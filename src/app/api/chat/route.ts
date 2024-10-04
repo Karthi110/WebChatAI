@@ -23,10 +23,10 @@ export async function POST(req: Request) {
 
   const query = messages[messages.length - 1].content;
   const results = await vectorStore.similaritySearch(query);
-  console.log(query);
 
   const result = await streamText({
     model: openai("gpt-3.5-turbo-0125"),
+    // TODO:add message after completion
     onFinish: (e) => console.log(e.usage),
     temperature: 0,
     prompt: `You are a friendly AI assistant augmented with an Pinecone Vector Store.

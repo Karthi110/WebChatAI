@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -9,7 +10,7 @@ export default function Home() {
   const router = useRouter();
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(`/dashboard/url/${url}`);
+    router.push(`/dashboard/chat/${url}`);
   };
   return (
     <div className="flex flex-col items-center w-full">
@@ -23,6 +24,12 @@ export default function Home() {
         />
         <Button type="submit">Get started</Button>
       </form>
+      <Image
+        src="https://ui.shadcn.com/og.jpg"
+        width={500}
+        height={500}
+        alt="chat image"
+      />
     </div>
   );
 }

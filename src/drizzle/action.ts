@@ -1,35 +1,44 @@
 "use server";
-import { randomUUID } from "crypto";
 import { db } from "./db";
-import { indexedUrls, newUrl, newUser, user } from "./schema";
-import { eq } from "drizzle-orm";
+import { chat, indexedUrls, newChat, newUrl } from "./schema";
+import { and, eq } from "drizzle-orm";
 import { pinecone, PINECONE_INDEX } from "@/lib/pinecone";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
 import { RecursiveUrlLoader } from "@langchain/community/document_loaders/web/recursive_url";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { compile } from "html-to-text";
+import { currentUser } from "@clerk/nextjs/server";
+import { getMetadataFromUrl } from "@/lib/utils";
 
 // AI ACTION
 
-export const vectorizeData = async (url: string) => {
+export const vectorizeData = async (url: string, loaderType: string) => {
   try {
     //fetching url from indexedurls
-    const isUrlAlreadyIndexed = await findIndexedUrl(url);
+    const fullUrl = url + loaderType;
+    const isUrlAlreadyIndexed = await getUrl(fullUrl);
 
     // if found continue dont re-vectorize if not found vectorize
-    if (!isUrlAlreadyIndexed.indexed) {
+    if (!isUrlAlreadyIndexed) {
       // add url to the indexedurls
-      await createIndexedUrl({ url: url });
+      await createIndexedUrl({ url: fullUrl });
+      const { userId } = await getCurrentUser();
+      const metadata = await getMetadataFromUrl(url);
+
+      await createChat({
+        url: fullUrl,
+        userId,
+        chatName: metadata?.title,
+        chatImage: metadata?.twitterImage,
+      });
 
       // reconstructing url for vector namespace
-      const reconstructedUrl = url.replace("https://", "https:/");
       const compiledConvert = compile({ wordwrap: false }); // returns (text: string) => string;
 
       // Loading webbase document from url
       const loader = new RecursiveUrlLoader(url, {
         extractor: compiledConvert,
-
         // depth to indicate how the level of loading
         maxDepth: 0,
       });
@@ -53,35 +62,25 @@ export const vectorizeData = async (url: string) => {
       // store the vectorized data into Pinecone with namespace of reconstructed url
       const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
         pineconeIndex,
-        namespace: reconstructedUrl,
+        namespace: fullUrl,
       });
-
       // add document into the vector store
       await vectorStore.addDocuments(doc_chunk);
     }
-    return;
+    return true;
   } catch (error) {
     return new Error("Failed to vectorize data");
   }
 };
 
 // USER ACTIONS
-export const upsertUser = async (data: newUser) => {
-  try {
-    // TODO:wire up with clerk id
-    const newId = randomUUID();
-    await db
-      .insert(user)
-      .values({
-        name: "test",
-        email: "fake@gmail.com",
-        tier: "free",
-      })
-      .onConflictDoUpdate({ target: user.email, set: { id: newId } });
-    return { message: "User Created!" };
-  } catch (error) {
-    return new Error("Failed to create User.");
+
+export const getCurrentUser = async () => {
+  const user = await currentUser();
+  if (!user) {
+    throw new Error("User not found");
   }
+  return { userId: user.id };
 };
 
 // INDEXED URL ACTIONS
@@ -94,12 +93,47 @@ export const createIndexedUrl = async (data: newUrl) => {
   }
 };
 
-export const findIndexedUrl = async (url: string) => {
+export const getUrl = async (url: string) => {
   const data = await db.query.indexedUrls.findFirst({
     where: eq(indexedUrls.url, url),
   });
-  if (data) {
-    return { indexed: true, data: data };
+  if (!data) {
+    return false;
   }
-  return { indexed: false, data: null };
+  return true;
+};
+
+//Chat
+
+export const getChat = async ({ url }: { url: string }) => {
+  const { userId } = await getCurrentUser();
+
+  const chats = await db.query.chat.findFirst({
+    where: and(eq(chat?.userId, userId), eq(chat?.url, url)),
+  });
+  // make infinite query for message
+  return chats;
+};
+
+export const createChat = async (data: newChat) => {
+  try {
+    const existingMessages = await getChat({
+      url: data.url!,
+    });
+    if (existingMessages) {
+      return { message: "chat room already exists" };
+    }
+    await db.insert(chat).values(data);
+    return;
+  } catch (error) {
+    return new Error("Failed to create chat room");
+  }
+};
+
+export const getChats = async () => {
+  const { userId } = await getCurrentUser();
+  const chats = await db.query.chat.findMany({
+    where: eq(chat.userId, userId),
+  });
+  return chats;
 };

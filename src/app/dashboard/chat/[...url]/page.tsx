@@ -1,9 +1,10 @@
-import Chat from "@/components/chat";
+import Chat from "@/components/chat/chat";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { reconstructUrl } from "@/lib/utils";
 
 interface PageProps {
   params: {
@@ -11,15 +12,11 @@ interface PageProps {
   };
 }
 
-function reconstructUrl({ url }: { url: string[] }) {
-  const decodeComponents = url.map((component) =>
-    decodeURIComponent(component)
-  );
-  return decodeComponents.join("/");
-}
-
 const page = async ({ params }: PageProps) => {
-  const reconstructedUrl = reconstructUrl({ url: params.url as string[] });
+  const { baseUrl, loaderType } = reconstructUrl({
+    url: params.url as string[],
+  });
+  console.log(baseUrl);
 
   return (
     <ResizablePanelGroup className="flex h-full" direction="horizontal">
@@ -38,13 +35,12 @@ const page = async ({ params }: PageProps) => {
         className="h-[calc(100vh-3.5rem)] rounded-md border"
       >
         <iframe
-          // TODO:add reconstructed url
-          src={reconstructedUrl}
+          src={baseUrl}
           height="100%"
           width="100%"
           title="website iframe"
           className="resize-none"
-        ></iframe>
+        />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel
@@ -52,7 +48,7 @@ const page = async ({ params }: PageProps) => {
         defaultSize={45}
         className="rounded-md border"
       >
-        <Chat url={reconstructedUrl} />
+        <Chat url={baseUrl + loaderType} />
       </ResizablePanel>
     </ResizablePanelGroup>
   );

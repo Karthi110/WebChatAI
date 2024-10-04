@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Provider from "@/components/provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const font = Recursive({ subsets: ["latin"] });
 
@@ -18,14 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={font.className}>
-        <Provider>
-          <Navbar />
-          <main className="bg-secondary">{children}</main>
-          <Toaster position="top-center" richColors />
-        </Provider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={font.className}>
+          <Provider>
+            <Navbar />
+            <main className="bg-secondary">{children}</main>
+            <Toaster position="top-center" richColors />
+          </Provider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
