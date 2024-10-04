@@ -1,6 +1,6 @@
 {
-  "id": "b5915c32-6a96-4de0-8e5e-6aebc0ebb0c2",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "ad355fde-669b-4ea7-9cac-4af97650003c",
+  "prevId": "b5915c32-6a96-4de0-8e5e-6aebc0ebb0c2",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -27,9 +27,9 @@
           "primaryKey": false,
           "notNull": false
         },
-        "url_id": {
-          "name": "url_id",
-          "type": "uuid",
+        "url": {
+          "name": "url",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -56,15 +56,15 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "chat_url_id_indexedUrls_id_fk": {
-          "name": "chat_url_id_indexedUrls_id_fk",
+        "chat_url_indexedUrls_url_fk": {
+          "name": "chat_url_indexedUrls_url_fk",
           "tableFrom": "chat",
           "tableTo": "indexedUrls",
           "columnsFrom": [
-            "url_id"
+            "url"
           ],
           "columnsTo": [
-            "id"
+            "url"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -100,10 +100,9 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "uuid",
+          "type": "serial",
           "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+          "notNull": true
         },
         "url": {
           "name": "url",
@@ -129,13 +128,6 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "indexedUrls_id_unique": {
-          "name": "indexedUrls_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        },
         "indexedUrls_url_unique": {
           "name": "indexedUrls_url_unique",
           "nullsNotDistinct": false,

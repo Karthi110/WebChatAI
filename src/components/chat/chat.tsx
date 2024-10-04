@@ -1,29 +1,32 @@
 "use client";
 
 import { useChat } from "ai/react";
-import { Button } from "./ui/button";
-import { Send, Trash } from "lucide-react";
-import { Textarea } from "./ui/textarea";
+import { Button } from "../ui/button";
+import { Send } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 import Messages from "./messages";
-import UrlDialog from "./url-dialog";
-import React from "react";
+import MessageNav from "./message-nav";
+import { useQuery } from "@tanstack/react-query";
+import { getChat } from "@/drizzle/action";
 
 export default function Chat({ url }: { url: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     body: { url },
   });
 
+  console.log(url);
+
+  const { data, isLoading } = useQuery({
+    queryKey: [`${url}`],
+    queryFn: () => getChat({ url }),
+  });
+
+  if (isLoading) return <div>Loading</div>;
+  if (!data) return null;
+
   return (
     <div className="flex flex-col items-center h-full p-2 gap-1.5">
-      <div className="h-9 flex items-center justify-between w-full border-b">
-        <h1>chat name</h1>
-        <div className="flex gap-1.5">
-          <UrlDialog />
-          <Button variant="destructive" size="iconSm">
-            <Trash className="size-4" />
-          </Button>
-        </div>
-      </div>
+      <MessageNav name={data.chatName!} />
       <Messages messages={messages} />
       <div className="relative w-full">
         <form onSubmit={handleSubmit}>

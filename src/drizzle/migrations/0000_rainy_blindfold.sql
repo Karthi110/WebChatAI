@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS "chat" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"chat_name" text,
 	"chat_image" text,
-	"url_id" uuid NOT NULL,
+	"url_id" uuid,
 	"user_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),

@@ -47,6 +47,17 @@ const Navbar = () => {
                   Pricing
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/dashboard"
+                  className={buttonVariants({
+                    variant: "link",
+                    size: "sm",
+                  })}
+                >
+                  dashboard
+                </Link>
+              </li>
               <ClerkLoading>
                 <li>
                   <Button size="sm">Sign in</Button>

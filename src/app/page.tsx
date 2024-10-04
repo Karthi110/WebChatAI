@@ -10,7 +10,7 @@ export default function Home() {
   const router = useRouter();
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(`/dashboard/url/${url}`);
+    router.push(`/dashboard/chat/${url}`);
   };
   return (
     <div className="flex flex-col items-center w-full">

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Bot, User } from "lucide-react";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 interface PageProps {
   content: string;

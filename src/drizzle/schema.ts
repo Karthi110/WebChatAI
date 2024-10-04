@@ -24,7 +24,7 @@ export const user = pgTable("user", {
 });
 
 export const indexedUrls = pgTable("indexedUrls", {
-  id: uuid("id").defaultRandom().primaryKey().notNull().unique(),
+  id: serial("id").primaryKey().notNull(),
   url: text("url").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
@@ -34,9 +34,7 @@ export const chat = pgTable("chat", {
   id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
   chatName: text("chat_name"),
   chatImage: text("chat_image"),
-  urlId: uuid("url_id")
-    .references(() => indexedUrls.id)
-    .notNull(),
+  url: text("url").references(() => indexedUrls.url),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),

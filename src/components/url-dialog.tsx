@@ -35,7 +35,7 @@ const UrlDialog = ({ text }: { text?: string }) => {
     mutationFn: async () => await vectorizeData(url, loader),
     onSuccess: () => {
       toast.success("Url vectorized!");
-      router.push(`/dashboard/url/${url}/${loader}`);
+      router.push(`/dashboard/chat/${url}/${loader}`);
     },
     onError: () => toast.error("Failed to vectorize Url"),
   });
