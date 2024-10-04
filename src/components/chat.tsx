@@ -4,6 +4,7 @@ import { useChat } from "ai/react";
 import { Button } from "./ui/button";
 import { Send, Trash } from "lucide-react";
 import { Textarea } from "./ui/textarea";
+import Messages from "./messages";
 
 export default function Chat({ url }: { url: string }) {
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -18,20 +19,7 @@ export default function Chat({ url }: { url: string }) {
           <Trash className="size-4" />
         </Button>
       </div>
-      <div className="h-full max-h-[calc(100vh-3.5rem-1rem-8rem)] overflow-y-auto text-start">
-        {messages.length ? (
-          <div>
-            {messages.map((m, i) => (
-              <div key={i} className="flex flex-col">
-                <p>{JSON.stringify(m)}</p>
-                <span className="text-xs">{m.createdAt?.toDateString()}</span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div>Get started with typing</div>
-        )}
-      </div>
+      <Messages messages={messages} />
       <div className="relative w-full">
         <form onSubmit={handleSubmit}>
           <Textarea
