@@ -16,7 +16,7 @@ import { vectorizeData } from "@/drizzle/action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-const UrlDialog = () => {
+const UrlDialog = ({ text }: { text?: string }) => {
   const [url, setUrl] = useState<string>("");
   const router = useRouter();
 
@@ -40,9 +40,9 @@ const UrlDialog = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button size={text ? "sm" : "iconSm"}>
           <Plus className="size-4 mr-0.5" />
-          Create a new chat.
+          {text ? text : null}
         </Button>
       </DialogTrigger>
       <DialogContent>

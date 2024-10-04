@@ -7,7 +7,7 @@ const Dashboard = async () => {
     <MaxWidthWrapper classname="flex flex-col items-center h-[calc(100vh-3.5rem)] gap-6">
       <div className="flex items-center w-full justify-between mt-10">
         <h1 className="text-2xl">Your chats</h1>
-        <UrlDialog />
+        <UrlDialog text="create new chat." />
       </div>
       <div className="grid grid-cols-3 gap-6">
         <ChatDisplay />

@@ -22,14 +22,14 @@ export const user = pgTable("user", {
 });
 
 export const indexedUrls = pgTable("indexedUrls", {
-  id: serial("id").primaryKey().notNull().unique(),
+  id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
   url: text("url").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 
 export const messages = pgTable("messages", {
-  id: serial("id").primaryKey().notNull().unique(),
+  id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
   urlId: integer("url_id").references(() => indexedUrls.id),
   userId: uuid("user_id")
     .notNull()
@@ -43,7 +43,7 @@ export const messages = pgTable("messages", {
 export const roleEnum = pgEnum("role", ["user", "system"]);
 
 export const message = pgTable("message", {
-  id: serial("id").primaryKey().notNull().unique(),
+  id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
   body: text("body"),
   role: roleEnum("role"),
   messagesId: integer("messages_id").references(() => messages.id, {

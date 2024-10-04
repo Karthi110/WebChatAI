@@ -8,7 +8,6 @@ interface PageProps {
 }
 
 const Messages = ({ messages }: PageProps) => {
-  console.log(messages[0]?.role);
   return (
     <div className="h-full w-full max-h-[calc(100vh-3.5rem-1rem-8rem)] overflow-y-auto text-start">
       {messages.length ? (
