@@ -1,4 +1,5 @@
 import Chat from "@/components/chat/chat";
+import Sidebar from "@/components/sidebar";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -16,7 +17,6 @@ const page = async ({ params }: PageProps) => {
   const { baseUrl, loaderType } = reconstructUrl({
     url: params.url as string[],
   });
-  console.log(baseUrl);
 
   return (
     <ResizablePanelGroup className="flex h-full" direction="horizontal">
@@ -26,7 +26,7 @@ const page = async ({ params }: PageProps) => {
         maxSize={10}
         className="rounded-r-md"
       >
-        sidebar
+        <Sidebar />
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel

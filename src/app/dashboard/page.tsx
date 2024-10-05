@@ -1,7 +1,10 @@
 import ChatDisplay from "@/components/chat/chat-display-card";
 import MaxWidthWrapper from "@/components/max-width-wrapper";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import UrlDialog from "@/components/url-dialog";
 import { getChats } from "@/drizzle/action";
+import { Plus } from "lucide-react";
+import React from "react";
 
 const Dashboard = async () => {
   const chats = await getChats();
@@ -11,7 +14,7 @@ const Dashboard = async () => {
         <h1 className="text-2xl">Your chats</h1>
         <UrlDialog text="create new chat." />
       </div>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {chats.length ? (
           chats.map((chat, i) => (
             <ChatDisplay
@@ -22,7 +25,16 @@ const Dashboard = async () => {
             />
           ))
         ) : (
-          <div>create new chat now</div>
+          <div className="grid grid-cols-3 gap-6">
+            <Card className="w-[300px] h-[180px]">
+              <CardContent>
+                <CardHeader className="flex items-center justify-center">
+                  <Plus className="size-24 text-muted-foreground" />
+                  <UrlDialog variant="outline" text="create one" icon={false} />
+                </CardHeader>
+              </CardContent>
+            </Card>
+          </div>
         )}
       </div>
     </MaxWidthWrapper>
