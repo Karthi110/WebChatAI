@@ -11,13 +11,7 @@ const Messages = ({ messages }: PageProps) => {
   return (
     <div className="h-full w-full max-h-[calc(100vh-3.5rem-1rem-8rem)] overflow-y-auto text-start">
       {messages.length ? (
-        messages.map((m, i) => (
-          <Message
-            key={i}
-            content={m.content}
-            isUserMessage={m.role === "user"}
-          />
-        ))
+        messages.map((m, i) => <Message key={i} message={m} />)
       ) : (
         <div className="flex-1 flex flex-col items-center justify-center gap-2 h-full">
           <MessagesSquare className="size-8 text-blue-500" />

@@ -11,6 +11,7 @@ import {
   ClerkLoading,
   ClerkLoaded,
 } from "@clerk/nextjs";
+import { User } from "lucide-react";
 
 const Navbar = () => {
   return (
@@ -23,75 +24,46 @@ const Navbar = () => {
           >
             <span>WebChatAI.</span>
           </Link>
-
-          <aside>
-            <ul className=" flex items-center gap-4">
-              {/* TODO:show tier only when logged in  */}
-              <li
-                className={buttonVariants({
-                  variant: "secondary",
-                  size: "sm",
-                })}
-              >
-                tier:free
-              </li>
-              {/* TODO:if has paid subscription dont show pricing  */}
-              <li>
-                <Link
-                  href="/"
-                  className={buttonVariants({
-                    variant: "link",
-                    size: "sm",
-                  })}
-                >
-                  Pricing
-                </Link>
-              </li>
-              <li>
+          {/* TODO:mobile nav */}
+          <aside className="hidden md:block">
+            <Link href="/" className={buttonVariants({ variant: "link" })}>
+              Pricings
+            </Link>
+            <Link href="/" className={buttonVariants({ variant: "link" })}>
+              Talk to us.
+            </Link>
+          </aside>
+          <aside className="flex gap-2 items-center">
+            <ClerkLoading>
+              <div className="w-16 h-8 bg-secondary rounded-md animate-pulse" />
+              <div className="w-16 h-8 bg-secondary rounded-md animate-pulse" />
+            </ClerkLoading>
+            <ClerkLoaded>
+              <SignedOut>
+                <Button asChild size="sm">
+                  <SignInButton
+                    mode="modal"
+                    fallbackRedirectUrl={"/dashboard"}
+                    signUpFallbackRedirectUrl={"/auth-callback"}
+                  />
+                </Button>
+                <Button variant="outline" size="sm">
+                  <SignUpButton
+                    mode="modal"
+                    signInFallbackRedirectUrl={"/auth-callback"}
+                  />
+                </Button>
+              </SignedOut>
+              <SignedIn>
                 <Link
                   href="/dashboard"
-                  className={buttonVariants({
-                    variant: "link",
-                    size: "sm",
-                  })}
+                  className={buttonVariants({ variant: "link" })}
                 >
-                  dashboard
+                  Dashboard
                 </Link>
-              </li>
-              <ClerkLoading>
-                <li>
-                  <Button size="sm">Sign in</Button>
-                </li>
-                <li>
-                  <Button variant="outline" size="sm">
-                    Sign up
-                  </Button>
-                </li>
-              </ClerkLoading>
-              <ClerkLoaded>
-                <SignedOut>
-                  <li>
-                    <Button size="sm" asChild>
-                      <SignInButton
-                        mode="modal"
-                        fallbackRedirectUrl={"/dashboard"}
-                      />
-                    </Button>
-                  </li>
-                  <li>
-                    <Button variant="outline" size="sm" asChild>
-                      <SignUpButton
-                        mode="modal"
-                        signInFallbackRedirectUrl={"/auth-callback"}
-                      />
-                    </Button>
-                  </li>
-                </SignedOut>
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
-              </ClerkLoaded>
-            </ul>
+                <UserButton />
+              </SignedIn>
+            </ClerkLoaded>
           </aside>
         </div>
       </MaxWidthWrapper>
