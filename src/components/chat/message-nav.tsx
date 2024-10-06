@@ -1,6 +1,4 @@
 import UrlDialog from "../url-dialog";
-import { Button } from "../ui/button";
-import { Trash } from "lucide-react";
 import DeleteDialog from "../delete-dialog";
 
 const MessageNav = ({ name, chatId }: { name: string; chatId: string }) => {
@@ -11,16 +9,9 @@ const MessageNav = ({ name, chatId }: { name: string; chatId: string }) => {
         <UrlDialog />
         <DeleteDialog chatId={chatId} />
       </div>
-      <div className="flex gap-x-2">
+      <div className="md:flex gap-x-2 hidden">
         <UrlDialog text="Create new chat" />
         <DeleteDialog chatId={chatId} text="Delete chat" />
-      </div>
-      <div className="flex gap-x-2">
-        <UrlDialog text="create new chat" />
-        <Button variant="destructive" size="sm">
-          <Trash className="size-4" />
-          Delete chat.
-        </Button>
       </div>
     </div>
   );

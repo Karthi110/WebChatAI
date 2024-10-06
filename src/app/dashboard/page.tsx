@@ -6,6 +6,8 @@ import { getChats } from "@/drizzle/action";
 import { Plus } from "lucide-react";
 import React from "react";
 
+export const runtime = "dynamic";
+
 const Dashboard = async () => {
   const chats = await getChats();
   return (
