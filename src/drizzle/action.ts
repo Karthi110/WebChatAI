@@ -1,7 +1,14 @@
 "use server";
 import { db } from "./db";
-import { chat, indexedUrls, newChat, newUrl } from "./schema";
-import { and, eq } from "drizzle-orm";
+import {
+  chat,
+  indexedUrls,
+  message,
+  newChat,
+  newMessage,
+  newUrl,
+} from "./schema";
+import { and, desc, eq } from "drizzle-orm";
 import { pinecone, PINECONE_INDEX } from "@/lib/pinecone";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { PineconeStore } from "@langchain/pinecone";
@@ -105,19 +112,27 @@ export const getUrl = async (url: string) => {
 
 //Chat
 
-export const getChat = async ({ url }: { url: string }) => {
+export const getChatByUrl = async ({ url }: { url: string }) => {
   const { userId } = await getCurrentUser();
 
   const chats = await db.query.chat.findFirst({
-    where: and(eq(chat?.userId, userId), eq(chat?.url, url)),
+    with: { message: true },
+    where: and(eq(chat.userId, userId), eq(chat.url, url)),
   });
   // make infinite query for message
   return chats;
 };
 
+export const getChatById = async (chatId: string) => {
+  const data = await db.query.chat.findFirst({
+    where: eq(chat.id, chatId),
+  });
+  return data;
+};
+
 export const createChat = async (data: newChat) => {
   try {
-    const existingMessages = await getChat({
+    const existingMessages = await getChatByUrl({
       url: data.url!,
     });
     if (existingMessages) {
@@ -136,4 +151,47 @@ export const getChats = async () => {
     where: eq(chat.userId, userId),
   });
   return chats;
+};
+
+//Message
+
+export const addMessage = async (data: newMessage) => {
+  try {
+    const chatExists = await getChatById(data.chatId!);
+    if (!chatExists) {
+      throw new Error("chat does not exist");
+    }
+    await db.insert(message).values(data);
+    return { success: true };
+  } catch (error) {
+    return new Error("Failed to add message");
+  }
+};
+
+export const getMessage = async ({ chatId }: { chatId: string }) => {
+  const messages = await db
+    .select()
+    .from(message)
+    .where(eq(message.chatId, chatId));
+  return messages;
+};
+
+export const getMessageWithInfiniteQuery = async ({
+  chatId,
+  limit = 10,
+  offset = 0,
+}: {
+  chatId: string;
+  limit: number;
+  offset: number;
+}) => {
+  const messages = await db
+    .select()
+    .from(message)
+    .where(eq(message.chatId, chatId))
+    .limit(limit) // Limit the number of messages to fetch
+    .offset(offset) // Start from a specific point for pagination
+    .orderBy(desc(message.createdAt));
+
+  return messages;
 };

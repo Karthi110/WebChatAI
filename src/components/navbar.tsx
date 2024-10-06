@@ -25,14 +25,7 @@ const Navbar = () => {
             <span>WebChatAI.</span>
           </Link>
           {/* TODO:mobile nav */}
-          <aside className="hidden md:block">
-            <Link href="/" className={buttonVariants({ variant: "link" })}>
-              Pricings
-            </Link>
-            <Link href="/" className={buttonVariants({ variant: "link" })}>
-              Talk to us.
-            </Link>
-          </aside>
+
           <aside className="flex gap-2 items-center">
             <ClerkLoading>
               <div className="w-16 h-8 bg-secondary rounded-md animate-pulse" />

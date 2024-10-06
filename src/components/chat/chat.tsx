@@ -7,22 +7,23 @@ import { Textarea } from "../ui/textarea";
 import Messages from "./messages";
 import MessageNav from "./message-nav";
 import { useQuery } from "@tanstack/react-query";
-import { getChat } from "@/drizzle/action";
+import { getChatByUrl } from "@/drizzle/action";
 
 export default function Chat({ url }: { url: string }) {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    body: { url },
-  });
-
-  console.log(url);
-
+  // TODO:add messages and infinte query
   const { data, isLoading } = useQuery({
+    // TODO:add userId for querykey
     queryKey: [`${url}`],
-    queryFn: () => getChat({ url }),
+    queryFn: () => getChatByUrl({ url }),
+  });
+  let chatId = data?.id!;
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    body: { url, chatId },
   });
 
   if (isLoading) return <div>Loading</div>;
   if (!data) return null;
+  console.log(data.message);
 
   return (
     <div className="flex flex-col items-center h-full p-2 gap-1.5">

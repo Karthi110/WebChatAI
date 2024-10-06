@@ -1,5 +1,5 @@
 DO $$ BEGIN
- CREATE TYPE "public"."role" AS ENUM('user', 'system');
+ CREATE TYPE "public"."role" AS ENUM('user', 'assistant');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS "chat" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"chat_name" text,
 	"chat_image" text,
-	"url_id" uuid,
+	"url" text,
 	"user_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
@@ -22,11 +22,10 @@ CREATE TABLE IF NOT EXISTS "chat" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "indexedUrls" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" serial PRIMARY KEY NOT NULL,
 	"url" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp,
-	CONSTRAINT "indexedUrls_id_unique" UNIQUE("id"),
 	CONSTRAINT "indexedUrls_url_unique" UNIQUE("url")
 );
 --> statement-breakpoint
@@ -53,7 +52,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 );
 --> statement-breakpoint
 DO $$ BEGIN
- ALTER TABLE "chat" ADD CONSTRAINT "chat_url_id_indexedUrls_id_fk" FOREIGN KEY ("url_id") REFERENCES "public"."indexedUrls"("id") ON DELETE no action ON UPDATE no action;
+ ALTER TABLE "chat" ADD CONSTRAINT "chat_url_indexedUrls_url_fk" FOREIGN KEY ("url") REFERENCES "public"."indexedUrls"("url") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
