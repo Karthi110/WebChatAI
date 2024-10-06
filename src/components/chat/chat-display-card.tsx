@@ -1,16 +1,7 @@
 import Image from "next/image";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "../ui/card";
 import Link from "next/link";
-import { Trash } from "lucide-react";
-import { Button } from "../ui/button";
-import DeleteDialog from "../delete-dialog";
+import RemoveDialog from "../remove-dialog";
 
 interface PageProps {
   name: string;
@@ -40,7 +31,7 @@ const ChatDisplay = ({ name, imageUrl, url, chatId }: PageProps) => {
             </CardDescription>
           </Link>
           <div className="opacity-0 group-hover:opacity-100">
-            <DeleteDialog chatId={chatId} />
+            <RemoveDialog chatId={chatId} />
           </div>
         </CardHeader>
       </CardContent>

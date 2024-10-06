@@ -23,7 +23,7 @@ interface PageProps {
   chatId: string;
 }
 
-const DeleteDialog = ({ chatId, text }: PageProps) => {
+const RemoveDialog = ({ chatId, text }: PageProps) => {
   const router = useRouter();
   const { mutate: removeChat } = useMutation({
     mutationFn: async () => await deleteChat({ chatId }),
@@ -41,11 +41,12 @@ const DeleteDialog = ({ chatId, text }: PageProps) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          className="absolute top-2 right-2"
+          className="absolute top-2 right-2 flex items-center gap-0.5"
           size="iconSm"
           variant="destructive"
         >
           <Trash className="size-3.5" />
+          {text ? text : null}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -74,4 +75,4 @@ const DeleteDialog = ({ chatId, text }: PageProps) => {
   );
 };
 
-export default DeleteDialog;
+export default RemoveDialog;
