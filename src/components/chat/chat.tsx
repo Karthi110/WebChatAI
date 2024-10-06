@@ -2,32 +2,34 @@
 
 import { useChat } from "ai/react";
 import { Button } from "../ui/button";
-import { Send } from "lucide-react";
+import { Loader, Loader2, Send } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import Messages from "./messages";
-import MessageNav from "./message-nav";
 import { useQuery } from "@tanstack/react-query";
 import { getChatByUrl } from "@/drizzle/action";
+import Messages from "./messages";
 
 export default function Chat({ url }: { url: string }) {
-  // TODO:add messages and infinte query
   const { data, isLoading } = useQuery({
-    // TODO:add userId for querykey
     queryKey: [`${url}`],
     queryFn: () => getChatByUrl({ url }),
   });
   let chatId = data?.id!;
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     body: { url, chatId },
+    initialMessages: data?.message,
   });
 
-  if (isLoading) return <div>Loading</div>;
+  if (isLoading)
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loader2 className="size-5 animate-spin text-primary mr-1" />
+        <p className="text-lg font-medium">Setting up...one moment.</p>
+      </div>
+    );
   if (!data) return null;
-  console.log(data.message);
 
   return (
-    <div className="flex flex-col items-center h-full p-2 gap-1.5">
-      <MessageNav name={data.chatName!} />
+    <div className="flex flex-col items-center h-full gap-1.5">
       <Messages messages={messages} />
       <div className="relative w-full">
         <form onSubmit={handleSubmit}>

@@ -1,4 +1,3 @@
-import React from "react";
 import { type Message as TMessage } from "ai";
 import { MessagesSquare } from "lucide-react";
 import Message from "./message";
