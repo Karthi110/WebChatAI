@@ -1,5 +1,5 @@
 {
-  "id": "ccde789b-c2d7-4322-88f0-40b726edf546",
+  "id": "c01a02e2-c616-45d8-b52f-4705edee2d04",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -152,14 +152,14 @@
           "name": "body",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "role": {
           "name": "role",
           "type": "role",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "chat_id": {
           "name": "chat_id",
@@ -171,7 +171,7 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": "now()"
         },
         "updated_at": {
@@ -242,7 +242,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
-          "default": "'free'"
+          "default": "'Free'"
         },
         "created_at": {
           "name": "created_at",
@@ -293,9 +293,8 @@
       "name": "tier",
       "schema": "public",
       "values": [
-        "free",
-        "standard",
-        "plus"
+        "Free",
+        "Pro"
       ]
     }
   },

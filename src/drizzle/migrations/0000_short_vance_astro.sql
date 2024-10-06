@@ -5,7 +5,7 @@ EXCEPTION
 END $$;
 --> statement-breakpoint
 DO $$ BEGIN
- CREATE TYPE "public"."tier" AS ENUM('free', 'standard', 'plus');
+ CREATE TYPE "public"."tier" AS ENUM('Free', 'Pro');
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;
@@ -31,10 +31,10 @@ CREATE TABLE IF NOT EXISTS "indexedUrls" (
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "message" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"body" text,
-	"role" "role",
+	"body" text NOT NULL,
+	"role" "role" NOT NULL,
 	"chat_id" uuid,
-	"created_at" timestamp DEFAULT now(),
+	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp,
 	CONSTRAINT "message_id_unique" UNIQUE("id")
 );
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS "user" (
 	"name" text,
 	"email" text NOT NULL,
 	"image_url" text,
-	"tier" "tier" DEFAULT 'free',
+	"tier" "tier" DEFAULT 'Free',
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp DEFAULT now(),
 	CONSTRAINT "user_id_unique" UNIQUE("id"),

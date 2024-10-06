@@ -1,10 +1,12 @@
 import Chat from "@/components/chat/chat";
+import MessageNav from "@/components/chat/message-nav";
 import Sidebar from "@/components/sidebar";
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { getChatByUrl } from "@/drizzle/action";
 import { reconstructUrl } from "@/lib/utils";
 
 interface PageProps {
@@ -17,38 +19,32 @@ const page = async ({ params }: PageProps) => {
   const { baseUrl, loaderType } = reconstructUrl({
     url: params.url as string[],
   });
+  const chat = await getChatByUrl({ url: baseUrl + loaderType });
+  if (!chat) return <div>No chat exists</div>;
 
   return (
-    <ResizablePanelGroup className="flex h-full" direction="horizontal">
+    <ResizablePanelGroup
+      className="!h-[calc(100vh-3.5rem)]"
+      direction="horizontal"
+    >
       <ResizablePanel
-        defaultSize={10}
+        defaultSize={15}
         minSize={10}
-        maxSize={10}
-        className="rounded-r-md"
+        maxSize={20}
+        className="rounded-r-md boder h-full bg-primary/30"
       >
         <Sidebar />
       </ResizablePanel>
-      <ResizableHandle />
-      <ResizablePanel
-        minSize={40}
-        defaultSize={45}
-        className="h-[calc(100vh-3.5rem)] rounded-md border"
-      >
-        <iframe
-          src={baseUrl}
-          height="100%"
-          width="100%"
-          title="website iframe"
-          className="resize-none"
-        />
-      </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel
-        minSize={40}
-        defaultSize={45}
-        className="rounded-md border"
+        minSize={80}
+        defaultSize={75}
+        className="rounded-md border w-full h-full bg-muted/30"
       >
-        <Chat url={baseUrl + loaderType} />
+        <MessageNav name={chat.chatName!} />
+        <div className="max-w-xl mx-auto h-[calc(100vh-8rem)]">
+          <Chat url={baseUrl + loaderType} />
+        </div>
       </ResizablePanel>
     </ResizablePanelGroup>
   );

@@ -1,23 +1,21 @@
-import { Many, relations } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
   serial,
   text,
   timestamp,
   pgTable,
   pgEnum,
-  integer,
   uuid,
-  char,
 } from "drizzle-orm/pg-core";
 
-export const tierEnum = pgEnum("tier", ["free", "standard", "plus"]);
+export const tierEnum = pgEnum("tier", ["Free", "Pro"]);
 
 export const user = pgTable("user", {
   id: text("id").primaryKey().notNull().unique(),
   name: text("name"),
   email: text("email").notNull().unique(),
   imageUrl: text("image_url"),
-  tier: tierEnum("tier").default("free"),
+  tier: tierEnum("tier").default("Free"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => new Date())
@@ -58,12 +56,12 @@ export const chatRelations = relations(chat, ({ many, one }) => ({
 
 export const message = pgTable("message", {
   id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
-  body: text("body"),
-  role: roleEnum("role"),
+  content: text("body").notNull(),
+  role: roleEnum("role").notNull(),
   chatId: uuid("chat_id").references(() => chat.id, {
     onDelete: "cascade",
   }),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
 

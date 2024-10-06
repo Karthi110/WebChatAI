@@ -43,7 +43,7 @@ const UrlDialog = ({
   const { mutate: createUrl, isPending } = useMutation({
     mutationFn: async () => await vectorizeData(url, loader),
     onSuccess: () => {
-      toast.success("Url vectorized!");
+      toast.success("chat room created!");
       router.push(`/dashboard/chat/${url}/${loader}`);
       setUrl("");
       setLoader("S");

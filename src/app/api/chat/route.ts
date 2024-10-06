@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
   await addMessage({
     chatId,
-    body: messages[messages.length - 1].content,
+    content: messages[messages.length - 1].content,
     role: "user",
   });
 
@@ -45,8 +45,8 @@ export async function POST(req: Request) {
 
       PREVIOUS CONVERSATION:
       ${prevMessages.map((message) => {
-        if (message.role === "user") return `User: ${message.body}\n`;
-        return `Assistant: ${message.body}\n`;
+        if (message.role === "user") return `User: ${message.content}\n`;
+        return `Assistant: ${message.content}\n`;
       })}
 
       \n----------------\n
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
       console.log(chatId, data.text);
       await addMessage({
         chatId: chatId,
-        body: data.text,
+        content: data.text,
         role: "assistant",
       });
     },
