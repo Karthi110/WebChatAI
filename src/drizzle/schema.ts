@@ -1,3 +1,4 @@
+import { Many, relations } from "drizzle-orm";
 import {
   serial,
   text,
@@ -23,6 +24,10 @@ export const user = pgTable("user", {
     .defaultNow(),
 });
 
+export const usersRelations = relations(user, ({ many }) => ({
+  chat: many(chat),
+}));
+
 export const indexedUrls = pgTable("indexedUrls", {
   id: serial("id").primaryKey().notNull(),
   url: text("url").notNull().unique(),
@@ -44,7 +49,12 @@ export const chat = pgTable("chat", {
     .defaultNow(),
 });
 
-export const roleEnum = pgEnum("role", ["user", "system"]);
+export const roleEnum = pgEnum("role", ["user", "assistant"]);
+
+export const chatRelations = relations(chat, ({ many, one }) => ({
+  message: many(message),
+  user: one(user, { fields: [chat.userId], references: [user.id] }),
+}));
 
 export const message = pgTable("message", {
   id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
@@ -56,6 +66,10 @@ export const message = pgTable("message", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });
+
+export const messageRelations = relations(message, ({ one }) => ({
+  chat: one(chat, { fields: [message.chatId], references: [chat.id] }),
+}));
 
 export type newUser = typeof user.$inferInsert;
 export type newUrl = typeof indexedUrls.$inferInsert;
