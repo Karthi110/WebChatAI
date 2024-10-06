@@ -20,6 +20,7 @@ export default function Chat({ url }: { url: string }) {
       initialMessages: data?.message,
     });
 
+
   if (isLoading)
     return (
       <div className="w-full h-full flex items-center justify-center">

@@ -7,7 +7,6 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { Separator } from "@/components/ui/separator";
 import UrlDialog from "@/components/url-dialog";
 import { getChatByUrl } from "@/drizzle/action";
 import { reconstructUrl } from "@/lib/utils";
@@ -50,6 +49,7 @@ const page = async ({ params }: PageProps) => {
   return (
     <ResizablePanelGroup
       className="!h-[calc(100vh-3.5rem)] grainy3"
+
       direction="horizontal"
     >
       <ResizablePanel
@@ -57,6 +57,7 @@ const page = async ({ params }: PageProps) => {
         minSize={10}
         maxSize={20}
         className="h-full"
+
       >
         <Sidebar />
       </ResizablePanel>
@@ -64,6 +65,7 @@ const page = async ({ params }: PageProps) => {
       <ResizablePanel minSize={80} defaultSize={75} className="w-full h-full">
         <MessageNav name={chat.chatName!} chatId={chat.id} />
         <div className="max-w-xl md:max-w-2xl mx-auto h-[calc(100vh-8rem)]">
+    
           <Chat url={baseUrl + loaderType} />
         </div>
       </ResizablePanel>

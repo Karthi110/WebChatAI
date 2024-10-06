@@ -12,6 +12,7 @@ const Sidebar = async () => {
         <div className="flex flex-col items-center justify-center gap-y-1">
           <UrlDialog text="add new chat" variant="outline" />
           <Separator className="my-2" />
+
           <h1 className="font-semibold text-base">Chats</h1>
           {chats.map((chat, i) => {
             const correctedUrl =
