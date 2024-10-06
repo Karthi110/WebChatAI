@@ -48,7 +48,7 @@ export default function Pricing() {
           Pricing Plans
         </h1>
         <p className="mt-4 text-lg text-gray-600">
-          Choose the plan that's right for you
+          Choose the plan that&apos;s right for you
         </p>
       </MaxWidthWrapper>
 
