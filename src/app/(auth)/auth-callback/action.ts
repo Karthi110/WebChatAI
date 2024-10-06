@@ -20,7 +20,7 @@ export const getAuthStatus = async () => {
       id: clerkUser.id,
       name: clerkUser.fullName,
       imageUrl: clerkUser.imageUrl,
-      tier: "free",
+      tier: "Free",
       email: clerkUser.emailAddresses[0].emailAddress,
     });
   }
