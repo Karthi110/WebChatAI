@@ -14,10 +14,11 @@ export default function Chat({ url }: { url: string }) {
     queryFn: () => getChatByUrl({ url }),
   });
   let chatId = data?.id!;
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    body: { url, chatId },
-    initialMessages: data?.message,
-  });
+  const { messages, input, handleInputChange, handleSubmit, setInput } =
+    useChat({
+      body: { url, chatId },
+      initialMessages: data?.message,
+    });
 
   if (isLoading)
     return (
@@ -39,6 +40,15 @@ export default function Chat({ url }: { url: string }) {
             autoFocus
             value={input}
             onChange={handleInputChange}
+            className="bg-white"
+            required
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit();
+                setInput("");
+              }
+            }}
           />
           <Button
             size="iconSm"

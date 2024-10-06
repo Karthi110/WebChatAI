@@ -16,7 +16,7 @@ import { RecursiveUrlLoader } from "@langchain/community/document_loaders/web/re
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { compile } from "html-to-text";
 import { currentUser } from "@clerk/nextjs/server";
-import { getMetadataFromUrl } from "@/lib/utils";
+import { getMetadataFromUrl, getRandomImage } from "@/lib/utils";
 
 // AI ACTION
 
@@ -25,19 +25,20 @@ export const vectorizeData = async (url: string, loaderType: string) => {
     //fetching url from indexedurls
     const fullUrl = url + loaderType;
     const isUrlAlreadyIndexed = await getUrl(fullUrl);
+    const { userId } = await getCurrentUser();
+    const metadata = await getMetadataFromUrl(url);
+    const imageUrl = getRandomImage();
 
     // if found continue dont re-vectorize if not found vectorize
     if (!isUrlAlreadyIndexed) {
       // add url to the indexedurls
       await createIndexedUrl({ url: fullUrl });
-      const { userId } = await getCurrentUser();
-      const metadata = await getMetadataFromUrl(url);
 
       await createChat({
         url: fullUrl,
         userId,
         chatName: metadata?.title,
-        chatImage: metadata?.twitterImage,
+        chatImage: imageUrl,
       });
 
       // reconstructing url for vector namespace
@@ -73,7 +74,14 @@ export const vectorizeData = async (url: string, loaderType: string) => {
       });
       // add document into the vector store
       await vectorStore.addDocuments(doc_chunk);
+      return;
     }
+    await createChat({
+      url: fullUrl,
+      userId,
+      chatName: metadata?.title,
+      chatImage: imageUrl,
+    });
     return true;
   } catch (error) {
     return new Error("Failed to vectorize data");
@@ -124,8 +132,9 @@ export const getChatByUrl = async ({ url }: { url: string }) => {
 };
 
 export const getChatById = async (chatId: string) => {
+  const { userId } = await getCurrentUser();
   const data = await db.query.chat.findFirst({
-    where: eq(chat.id, chatId),
+    where: and(eq(chat.id, chatId), eq(chat.userId, userId)),
   });
   return data;
 };
@@ -151,6 +160,26 @@ export const getChats = async () => {
     where: eq(chat.userId, userId),
   });
   return chats;
+};
+
+export const deleteChat = async ({ chatId }: { chatId: string }) => {
+  try {
+    const { userId } = await getCurrentUser();
+    if (!userId) {
+      throw new Error("user not found.");
+    }
+    const chatExisting = await getChatById(chatId);
+    if (!chatExisting) {
+      throw new Error("Chat does not exist.");
+    }
+
+    await db
+      .delete(chat)
+      .where(and(eq(chat.userId, userId), eq(chat.id, chatId)));
+    return { success: true };
+  } catch (error) {
+    return new Error("Failed to delete chat");
+  }
 };
 
 //Message

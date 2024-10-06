@@ -20,7 +20,7 @@ const Message = ({ message }: PageProps) => {
         {message.role === "user" ? (
           <div className="w-full flex items-start justify-end p-1 gap-x-0.5">
             <div className="flex items-start justify-center gap-1">
-              <ReactMarkdown className="max-w-prose w-fit bg-green-100 p-1.5 tracking-wide border rounded-md text-sm text-left font-medium shadow-md">
+              <ReactMarkdown className="max-w-sm w-fit bg-green-100 p-1.5 tracking-wide border rounded-md text-sm text-left font-medium shadow-md">
                 {message.content}
               </ReactMarkdown>
               <Button size="iconSm" className="rounded-xl">
@@ -31,7 +31,7 @@ const Message = ({ message }: PageProps) => {
         ) : (
           <div className="w-full flex items-start justify-start p-1 gap-x-0.5">
             <div className="flex items-start justify-center gap-1 flex-row-reverse">
-              <ReactMarkdown className="max-w-prose w-fit bg-fuchsia-100  p-1.5 tracking-wide border rounded-md text-sm text-left font-medium shadow-md">
+              <ReactMarkdown className="max-w-sm w-fit bg-fuchsia-100  p-1.5 tracking-wide border rounded-md text-sm text-left font-medium shadow-md">
                 {message.content}
               </ReactMarkdown>
               <Button
