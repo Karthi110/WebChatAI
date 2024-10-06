@@ -31,7 +31,7 @@ const ChatDisplay = ({ name, imageUrl, url, chatId }: PageProps) => {
             </CardDescription>
           </Link>
           <div className="opacity-0 group-hover:opacity-100">
-            <RemoveDialog chatId={chatId} />
+            <RemoveDialog chatId={chatId} isIcon={true} />
           </div>
         </CardHeader>
       </CardContent>

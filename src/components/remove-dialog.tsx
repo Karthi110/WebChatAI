@@ -17,13 +17,15 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface PageProps {
   text?: string;
   chatId: string;
+  isIcon: boolean;
 }
 
-const RemoveDialog = ({ chatId, text }: PageProps) => {
+const RemoveDialog = ({ chatId, text, isIcon = false }: PageProps) => {
   const router = useRouter();
   const { mutate: removeChat } = useMutation({
     mutationFn: async () => await deleteChat({ chatId }),
@@ -35,14 +37,17 @@ const RemoveDialog = ({ chatId, text }: PageProps) => {
     onSuccess: () => {
       toast.success("Chat deleted successful!");
       router.replace("/dashboard");
+      router.refresh();
     },
   });
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          className="absolute top-2 right-2 flex items-center gap-0.5"
-          size="iconSm"
+          className={cn("flex items-center gap-0.5", {
+            "absolute top-2 right-2": isIcon,
+          })}
+          size={isIcon ? "iconSm" : "sm"}
           variant="destructive"
         >
           <Trash className="size-3.5" />
