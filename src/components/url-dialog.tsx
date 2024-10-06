@@ -30,11 +30,13 @@ type Loaders = "S" | "R";
 const UrlDialog = ({
   text,
   variant,
-  icon = true,
+  showIcon = true,
+  size,
 }: {
   text?: string;
   variant?: "ghost" | "outline";
-  icon?: boolean;
+  showIcon?: boolean;
+  size?: "lg" | "sm";
 }) => {
   const [url, setUrl] = useState<string>("");
   const [loader, setLoader] = useState<Loaders>("S");
@@ -67,8 +69,11 @@ const UrlDialog = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size={text ? "sm" : "iconSm"} variant={variant ?? variant}>
-          {icon ? <Plus className="size-4 mr-0.5" /> : null}
+        <Button
+          size={size ? size : text ? "sm" : "iconSm"}
+          variant={variant ?? variant}
+        >
+          {showIcon ? <Plus className="size-3.5 mr-0.5" /> : null}
           {text ? text : null}
         </Button>
       </DialogTrigger>

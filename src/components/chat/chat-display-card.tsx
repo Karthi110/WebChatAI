@@ -1,31 +1,48 @@
 import Image from "next/image";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import Link from "next/link";
+import { Trash } from "lucide-react";
+import { Button } from "../ui/button";
+import DeleteDialog from "../delete-dialog";
 
 interface PageProps {
   name: string;
   imageUrl: string;
   url: string;
+  chatId: string;
 }
 
-const ChatDisplay = ({ name, imageUrl, url }: PageProps) => {
+const ChatDisplay = ({ name, imageUrl, url, chatId }: PageProps) => {
   const correctedUrl = url.slice(0, -1) + "/" + url.slice(-1);
+
   return (
-    <Card className="overflow-hidden border shadow-md">
-      <CardContent className="p-0 w-[330px] h-[200px] flex flex-col">
-        <Link href={`/dashboard/chat/${correctedUrl}`}>
-          <CardHeader className="flex items-center bg-emerald-100 p-0 w-[330px] h-[150px] relative">
+    <Card className="overflow-hidden border shadow-md bg-muted/30">
+      <CardContent className="p-0 flex flex-col relative  group">
+        <CardHeader className="flex items-center p-0">
+          <Link href={`/dashboard/chat/${correctedUrl}`}>
             <Image
               src={imageUrl}
-              fill
+              width={1920}
+              height={1080}
+              quality={100}
               alt="chat image"
-              className="object-cover border-b-2  "
+              className="object-contain"
             />
-          </CardHeader>
-          <CardFooter className="text-center p-1">
-            <h1 className="w-full text-lg truncate font-medium">{name}</h1>
-          </CardFooter>
-        </Link>
+            <CardDescription className="px-1 py-2 text-sm md:text-lg capitalize font-medium truncate w-full text-center text-black">
+              {name}
+            </CardDescription>
+          </Link>
+          <div className="opacity-0 group-hover:opacity-100">
+            <DeleteDialog chatId={chatId} />
+          </div>
+        </CardHeader>
       </CardContent>
     </Card>
   );

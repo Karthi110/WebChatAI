@@ -77,7 +77,7 @@ export const getMetadataFromUrl = async (url: string) => {
 export function constructMetadata({
   title = "WebChatAI",
   description = "Open source Webpage chatting bot",
-  image = "/dashboard.png",
+  image = "/thumbnail.png",
   icons = "/favicon.ico",
   noIndex = false,
 }: {
@@ -110,4 +110,14 @@ export function constructMetadata({
       },
     }),
   };
+}
+
+export function getRandomImage(): string {
+  const totalImages = 9;
+
+  const randomIndex = Math.floor(Math.random() * totalImages) + 1;
+
+  const imageUrl = `/images/${randomIndex}.png`;
+
+  return imageUrl;
 }
