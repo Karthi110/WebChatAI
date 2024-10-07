@@ -1,13 +1,13 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import Image from "next/image";
-import MaxWidthWrapper from "@/components/max-width-wrapper";
-import Pricing from "@/components/pricing";
-import Footer from "@/components/footer";
-import CustomSeparator from "@/components/wave-seperator";
 import React from "react";
 import { Viewport } from "next";
+import { ArrowRight } from "lucide-react";
+import CustomSeparator from "../components/custom-seperator";
+import Footer from "../components/footer";
+import MaxWidthWrapper from "../components/max-width-wrapper";
+import Pricing from "../components/pricing";
+import { buttonVariants } from "../components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 export const viewport: Viewport = {
   themeColor: "#fff",
@@ -16,36 +16,41 @@ export const viewport: Viewport = {
 export default function Home() {
   return (
     <>
-      <MaxWidthWrapper classname="pt-28 sm:pt-32 flex flex-col items-center justify-center text-center">
-        <div className=" mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 grainy3 px-7 py-2 shadow-md backdrop-blur transition-all hover:border-gray-300 hover:bg-white/50">
-          <p className=" text-sm font-semibold text-gray-700">
+      <MaxWidthWrapper classname="pt-28 sm:pt-32 flex flex-col items-center justify-center text-center grainy2">
+        <div className=" mx-auto mb-10 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-xl grainy px-7 py-2 shadow-md backdrop-blur transition-all">
+          <p className=" text-sm font-semibold text-secondary">
             WebChatAI is now public!
           </p>
         </div>
-        <h1 className=" max-w-4xl text-5xl font-bold md:text-6xl lg:text-7xl text-gray-700">
-          Chat with <span className="text-[#F25E6B]">Webpages</span> in secs
+        <h1 className="max-w-5xl text-5xl font-bold md:text-6xl lg:text-8xl text-secondary">
+          Chat with{" "}
+          <span className="grainy rounded-3xl px-4 py-2 underline decoration-from-font">
+            Webpages
+          </span>{" "}
+          in secs
         </h1>
-        <p className=" mt-5 max-w-prose text-gray-700 sm:text-lg">
+        <p className=" my-5 max-w-prose text-secondary sm:text-lg">
           WebChatAI alows you to have conservation with any Webpages. Simply
           copy paste the url and start asking questions right away.
         </p>
         <Link
           className={buttonVariants({
+            variant: "outline",
             size: "lg",
-            className:
-              "mt-5 z-10 rounded-lg hover:shadow-lg hover:shadow-primary transition-all duration-100",
+            className: "text-lg grainy2 text-secondary",
           })}
           href="/dashboard"
-          target="_blank"
         >
           Get started
           <ArrowRight className="size-5 ml-1" />
         </Link>
+        <div className="h-full w-full">
+          <CustomSeparator />
+        </div>
       </MaxWidthWrapper>
 
       {/* value proposition section */}
-      <CustomSeparator />
-      <div className="relative isolate grainy2 p-10">
+      <div className="relative isolate p-10">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -62,7 +67,7 @@ export default function Home() {
         {/* Main content */}
         <div className="mx-auto max-w-5xl px-4 lg:px-6">
           <div className="mt-8 sm:mt-16">
-            <div className="rounded-xl bg-gray-900/5 p-4 ring-1 ring-inset ring-gray-900/10">
+            <div className="rounded-xl bg-gray-900/5 p-4 ring-1 ring-inset ring-gray-900/10 grainy">
               <Image
                 src="/dashboard.png"
                 alt="preview"
@@ -148,9 +153,9 @@ export default function Home() {
           </li>
         </ol>
         <CustomSeparator />
-        <div className="mx-auto max-w-5xl px-4 lg:px-6 mt-16 sm:mt-24 mb-24">
+        <div className="mx-auto max-w-5xl px-4 lg:px-6 mt-16 sm:mt-24 mb-24 ">
           <div className="flow-root mt-8 sm:mt-16">
-            <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
+            <div className="-m-2 rounded-xl p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4 grainy">
               <Image
                 src="/preview.png"
                 alt="preview"
@@ -165,8 +170,8 @@ export default function Home() {
         <CustomSeparator />
 
         <Pricing />
-        <Footer />
       </div>
+      <Footer />
     </>
   );
 }

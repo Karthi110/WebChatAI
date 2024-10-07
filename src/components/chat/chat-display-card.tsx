@@ -6,25 +6,22 @@ import RemoveDialog from "../remove-dialog";
 interface PageProps {
   name: string;
   imageUrl: string;
-  url: string;
   chatId: string;
 }
 
-const ChatDisplay = ({ name, imageUrl, url, chatId }: PageProps) => {
-  const correctedUrl = url.slice(0, -1) + "/" + url.slice(-1);
-
+const ChatDisplay = ({ name, imageUrl, chatId }: PageProps) => {
   return (
-    <Card className="overflow-hidden border shadow-md bg-muted/30">
+    <Card className="overflow-hidden border shadow-md bg-muted/30 max-w-[350px] max-h-[200px]">
       <CardContent className="p-0 flex flex-col relative  group">
         <CardHeader className="flex items-center p-0">
-          <Link href={`/dashboard/chat/${correctedUrl}`}>
+          <Link href={`/dashboard/chat/${chatId}`}>
             <Image
               src={imageUrl}
               width={1920}
               height={1080}
               quality={100}
               alt="chat image"
-              className="object-contain"
+              className="object-contain max-w-[300px] max-h-[180px]"
             />
             <CardDescription className="px-1 py-2 text-sm md:text-lg capitalize font-medium truncate w-full text-center text-black">
               {name}

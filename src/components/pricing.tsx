@@ -1,15 +1,15 @@
 import React from "react";
 import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
+
+import MaxWidthWrapper from "./max-width-wrapper";
+import { Button } from "./ui/button";
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import MaxWidthWrapper from "./max-width-wrapper";
+  CardContent,
+  CardFooter,
+} from "./ui/card";
 
 export default function Pricing() {
   const plans = [

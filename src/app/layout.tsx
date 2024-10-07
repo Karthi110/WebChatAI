@@ -1,10 +1,10 @@
 import { Recursive } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/navbar";
-import Provider from "@/components/provider";
-import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
-import { cn, constructMetadata } from "@/lib/utils";
+import Navbar from "../components/navbar";
+import { cn, constructMetadata } from "../lib/utils";
+import Provider from "../components/provider";
+import { Toaster } from "../components/ui/sonner";
 
 const font = Recursive({ subsets: ["latin"] });
 
@@ -19,12 +19,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="light">
         <Provider>
-          <body
-            className={cn(
-              "min-h-[88vh] font-sans antialiased grainy",
-              font.className
-            )}
-          >
+          <body className={cn("min-h-screen antialiased", font.className)}>
             <Toaster />
             <Navbar />
             {children}

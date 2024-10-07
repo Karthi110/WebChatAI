@@ -1,29 +1,25 @@
-import Chat from "@/components/chat/chat";
-import MessageNav from "@/components/chat/message-nav";
-import Sidebar from "@/components/sidebar";
-import { buttonVariants } from "@/components/ui/button";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
-import UrlDialog from "@/components/url-dialog";
-import { getChatByUrl } from "@/drizzle/action";
-import { reconstructUrl } from "@/lib/utils";
 import { Frown } from "lucide-react";
 import Link from "next/link";
+import Chat from "../../../../components/chat/chat";
+import MessageNav from "../../../../components/chat/message-nav";
+import { buttonVariants } from "../../../../components/ui/button";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "../../../../components/ui/resizable";
+import UrlDialog from "../../../../components/url-dialog";
+import { getChatById } from "../../../../drizzle/action";
+import Sidebar from "../../../../components/sidebar";
 
 interface PageProps {
   params: {
-    url: string | string[] | undefined;
+    chatId: string;
   };
 }
 
 const page = async ({ params }: PageProps) => {
-  const { baseUrl, loaderType } = reconstructUrl({
-    url: params.url as string[],
-  });
-  const chat = await getChatByUrl({ url: baseUrl + loaderType });
+  const chat = await getChatById(params.chatId);
   if (!chat)
     return (
       <div className="h-[calc(100vh-3.5rem)] flex items-center justify-center flex-col space-y-2">
@@ -48,8 +44,7 @@ const page = async ({ params }: PageProps) => {
 
   return (
     <ResizablePanelGroup
-      className="!h-[calc(100vh-3.5rem)] grainy3"
-
+      className="!h-[calc(100vh-3.5rem)] grainy2"
       direction="horizontal"
     >
       <ResizablePanel
@@ -57,16 +52,18 @@ const page = async ({ params }: PageProps) => {
         minSize={10}
         maxSize={20}
         className="h-full"
-
       >
         <Sidebar />
       </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel minSize={80} defaultSize={75} className="w-full h-full">
+      <ResizableHandle withHandle className="grainy2" />
+      <ResizablePanel
+        minSize={80}
+        defaultSize={75}
+        className="w-full h-full border-l-2 rounded-tl-xl bg-white"
+      >
         <MessageNav name={chat.chatName!} chatId={chat.id} />
         <div className="max-w-xl md:max-w-2xl mx-auto h-[calc(100vh-8rem)]">
-    
-          <Chat url={baseUrl + loaderType} />
+          <Chat chatId={params.chatId} />
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>

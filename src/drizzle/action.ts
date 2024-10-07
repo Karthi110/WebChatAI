@@ -1,5 +1,14 @@
 "use server";
 import { db } from "./db";
+import { and, desc, eq } from "drizzle-orm";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { PineconeStore } from "@langchain/pinecone";
+import { RecursiveUrlLoader } from "@langchain/community/document_loaders/web/recursive_url";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { compile } from "html-to-text";
+import { currentUser } from "@clerk/nextjs/server";
+import { getMetadataFromUrl, getRandomImage } from "../lib/utils";
+import { pinecone, PINECONE_INDEX } from "../lib/pinecone";
 import {
   chat,
   indexedUrls,
@@ -8,19 +17,16 @@ import {
   newMessage,
   newUrl,
 } from "./schema";
-import { and, desc, eq } from "drizzle-orm";
-import { pinecone, PINECONE_INDEX } from "@/lib/pinecone";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { PineconeStore } from "@langchain/pinecone";
-import { RecursiveUrlLoader } from "@langchain/community/document_loaders/web/recursive_url";
-import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
-import { compile } from "html-to-text";
-import { currentUser } from "@clerk/nextjs/server";
-import { getMetadataFromUrl, getRandomImage } from "@/lib/utils";
 
 // AI ACTION
 
-export const vectorizeData = async (url: string, loaderType: string) => {
+export const vectorizeData = async ({
+  url,
+  loaderType,
+}: {
+  url: string;
+  loaderType: string;
+}) => {
   try {
     //fetching url from indexedurls
     const fullUrl = url + loaderType;
@@ -35,11 +41,13 @@ export const vectorizeData = async (url: string, loaderType: string) => {
       await createIndexedUrl({ url: fullUrl });
 
       await createChat({
-        url: fullUrl,
         userId,
+        url: fullUrl,
         chatName: metadata?.title,
         chatImage: imageUrl,
       });
+
+      const chatId = await getChatId({ url: fullUrl });
 
       // reconstructing url for vector namespace
       const compiledConvert = compile({ wordwrap: false }); // returns (text: string) => string;
@@ -70,21 +78,25 @@ export const vectorizeData = async (url: string, loaderType: string) => {
       // store the vectorized data into Pinecone with namespace of reconstructed url
       const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
         pineconeIndex,
-        namespace: fullUrl,
+        namespace: chatId,
       });
       // add document into the vector store
       await vectorStore.addDocuments(doc_chunk);
-      return;
+      return { chatId: chatId };
     }
+
     await createChat({
       url: fullUrl,
       userId,
       chatName: metadata?.title,
       chatImage: imageUrl,
     });
-    return true;
+
+    const chatId = await getChatId({ url: fullUrl });
+
+    return { chatId: chatId };
   } catch (error) {
-    return new Error("Failed to vectorize data");
+    return { chatId: undefined };
   }
 };
 
@@ -120,34 +132,38 @@ export const getUrl = async (url: string) => {
 
 //Chat
 
-export const getChatByUrl = async ({ url }: { url: string }) => {
+export const getChatId = async ({ url }: { url: string }) => {
   const { userId } = await getCurrentUser();
 
   const chats = await db.query.chat.findFirst({
-    with: { message: true },
     where: and(eq(chat.userId, userId), eq(chat.url, url)),
   });
   // make infinite query for message
-  return chats;
+  return chats?.id;
 };
 
 export const getChatById = async (chatId: string) => {
   const { userId } = await getCurrentUser();
   const data = await db.query.chat.findFirst({
     where: and(eq(chat.id, chatId), eq(chat.userId, userId)),
+    with: { message: true },
   });
   return data;
 };
 
 export const createChat = async (data: newChat) => {
   try {
-    const existingMessages = await getChatByUrl({
+    const existingChat = await getChatId({
       url: data.url!,
     });
-    if (existingMessages) {
-      return { message: "chat room already exists" };
+    if (!existingChat) {
+      await db.insert(chat).values({
+        userId: data.userId,
+        url: data.url,
+        chatImage: data.chatImage,
+        chatName: data.chatName,
+      });
     }
-    await db.insert(chat).values(data);
     return;
   } catch (error) {
     return new Error("Failed to create chat room");

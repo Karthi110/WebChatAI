@@ -12,10 +12,10 @@ export const tierEnum = pgEnum("tier", ["Free", "Pro"]);
 
 export const user = pgTable("user", {
   id: text("id").primaryKey().notNull().unique(),
-  name: text("name"),
+  name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  imageUrl: text("image_url"),
-  tier: tierEnum("tier").default("Free"),
+  imageUrl: text("image_url").notNull(),
+  tier: tierEnum("tier").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at")
     .$onUpdate(() => new Date())
@@ -34,10 +34,12 @@ export const indexedUrls = pgTable("indexedUrls", {
 });
 
 export const chat = pgTable("chat", {
-  id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
-  chatName: text("chat_name"),
-  chatImage: text("chat_image"),
-  url: text("url").references(() => indexedUrls.url),
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  chatName: text("chat_name").notNull(),
+  chatImage: text("chat_image").notNull(),
+  url: text("url")
+    .references(() => indexedUrls.url)
+    .notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -55,12 +57,14 @@ export const chatRelations = relations(chat, ({ many, one }) => ({
 }));
 
 export const message = pgTable("message", {
-  id: uuid("id").primaryKey().notNull().unique().defaultRandom(),
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
   content: text("body").notNull(),
   role: roleEnum("role").notNull(),
-  chatId: uuid("chat_id").references(() => chat.id, {
-    onDelete: "cascade",
-  }),
+  chatId: uuid("chat_id")
+    .references(() => chat.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
 });

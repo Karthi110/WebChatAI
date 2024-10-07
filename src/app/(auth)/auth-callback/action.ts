@@ -1,8 +1,8 @@
 "use server";
-import { db } from "@/drizzle/db";
-import { user } from "@/drizzle/schema";
 import { currentUser } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { db } from "../../../drizzle/db";
+import { user } from "../../../drizzle/schema";
 
 export const getAuthStatus = async () => {
   const clerkUser = await currentUser();
@@ -12,7 +12,10 @@ export const getAuthStatus = async () => {
   }
 
   const existingUser = await db.query.user.findFirst({
-    where: eq(user.id, clerkUser.id),
+    where: and(
+      eq(user.email, clerkUser.emailAddresses[0].emailAddress),
+      eq(user.id, clerkUser.id)
+    ),
   });
 
   if (!existingUser) {

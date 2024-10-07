@@ -1,25 +1,19 @@
 import Link from "next/link";
-import React from "react";
-import { buttonVariants } from "./ui/button";
-import CustomSeparator from "./wave-seperator";
 
 const Footer = () => {
   return (
-    <footer className="border-t-2 border-black border-dashed mt-24">
-      <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-14 md:flex-row md:py-0">
+    <footer className=" w-full border-t-2 grainy2 relative">
+      <div className="wavy h-[3px] rounded-sm absolute top-0 inset-x-0 w-full" />
+      <div className="container flex flex-col items-center justify-between gap-4 py-6 md:h-14 md:flex-row md:py-0 md:max-w-5xl mx-auto">
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           <Link
             href="/"
-            className={buttonVariants({
-              variant: "link",
-              size: "lg",
-              className: "text-primary font-bold tracking-wide text-xl",
-            })}
+            className="text-2xl text-secondary/70 font-[700] tracking-wide px-2"
           >
             WebChatAI
           </Link>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-secondary">
           &copy; {new Date().getFullYear()} WebChatAI. All rights reserved.
         </p>
       </div>

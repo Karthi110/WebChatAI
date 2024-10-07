@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
 import { Bot, User } from "lucide-react";
 import { Button } from "../ui/button";
 import ReactMarkdown from "react-markdown";
 import { Message as TMessage } from "ai";
+import { cn } from "../../lib/utils";
 
 interface PageProps {
   message: TMessage;

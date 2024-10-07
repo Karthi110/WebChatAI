@@ -17,8 +17,7 @@ CREATE TABLE IF NOT EXISTS "chat" (
 	"url" text,
 	"user_id" text NOT NULL,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now(),
-	CONSTRAINT "chat_id_unique" UNIQUE("id")
+	"updated_at" timestamp DEFAULT now()
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "indexedUrls" (
@@ -35,8 +34,7 @@ CREATE TABLE IF NOT EXISTS "message" (
 	"role" "role" NOT NULL,
 	"chat_id" uuid,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp,
-	CONSTRAINT "message_id_unique" UNIQUE("id")
+	"updated_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "user" (

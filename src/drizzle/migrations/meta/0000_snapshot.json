@@ -1,5 +1,5 @@
 {
-  "id": "c01a02e2-c616-45d8-b52f-4705edee2d04",
+  "id": "54e8af58-9aab-4b4f-aa5c-a2db8d83dbaf",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -84,15 +84,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "chat_id_unique": {
-          "name": "chat_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.indexedUrls": {
       "name": "indexedUrls",
@@ -198,15 +190,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "message_id_unique": {
-          "name": "message_id_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id"
-          ]
-        }
-      }
+      "uniqueConstraints": {}
     },
     "public.user": {
       "name": "user",

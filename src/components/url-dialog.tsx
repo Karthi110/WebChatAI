@@ -8,23 +8,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { Button, ButtonProps } from "./ui/button";
-import { Info, Loader2, Lock, Plus } from "lucide-react";
+import { Button } from "./ui/button";
+import { Info, Loader2, Plus } from "lucide-react";
 import { Input } from "./ui/input";
 import { useMutation } from "@tanstack/react-query";
-import { vectorizeData } from "@/drizzle/action";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { vectorizeData } from "../drizzle/action";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectGroup,
-  SelectLabel,
   SelectItem,
-} from "@/components/ui/select";
-import { VariantProps } from "class-variance-authority";
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 type Loaders = "S" | "R";
 const UrlDialog = ({
@@ -43,14 +42,18 @@ const UrlDialog = ({
   const router = useRouter();
 
   const { mutate: createUrl, isPending } = useMutation({
-    mutationFn: async () => await vectorizeData(url, loader),
-    onSuccess: () => {
-      toast.success("chat room created!");
-      router.push(`/dashboard/chat/${url}/${loader}`);
-      setUrl("");
-      setLoader("S");
+    mutationFn: async () => await vectorizeData({ url, loaderType: loader }),
+    onSuccess: (data) => {
+      if (data.chatId) {
+        toast.success("Chat room created!");
+        router.push(`/dashboard/chat/${data.chatId}`);
+        setUrl("");
+        setLoader("S");
+      } else {
+        toast.error("Failed to create Chat try again");
+      }
     },
-    onError: () => toast.error("Failed to vectorize Url"),
+    onError: () => toast.error("Failed to create Chat"),
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -86,6 +89,7 @@ const UrlDialog = ({
         </DialogHeader>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <Input
+            autoFocus
             value={url}
             placeholder="https://example.com..."
             onChange={(e) => setUrl(e.target.value)}

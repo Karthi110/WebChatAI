@@ -1,6 +1,5 @@
 "use client";
-import { deleteChat } from "@/drizzle/action";
-import { useMutation } from "@tanstack/react-query";
+import { QueryClient, useMutation } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import React from "react";
 import { toast } from "sonner";
@@ -17,13 +16,15 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { deleteChat } from "../drizzle/action";
+import { cn } from "../lib/utils";
 
 interface PageProps {
   text?: string;
   chatId: string;
   isIcon: boolean;
 }
+const queryClient = new QueryClient();
 
 const RemoveDialog = ({ chatId, text, isIcon = false }: PageProps) => {
   const router = useRouter();
@@ -36,8 +37,8 @@ const RemoveDialog = ({ chatId, text, isIcon = false }: PageProps) => {
       }),
     onSuccess: () => {
       toast.success("Chat deleted successful!");
+      queryClient.invalidateQueries({ queryKey: ["chats"] });
       router.replace("/dashboard");
-      router.refresh();
     },
   });
   return (
@@ -50,7 +51,7 @@ const RemoveDialog = ({ chatId, text, isIcon = false }: PageProps) => {
           size={isIcon ? "iconSm" : "sm"}
           variant="destructive"
         >
-          <Trash className="size-3.5" />
+          <Trash className="size-3.5 mr-0.5" />
           {text ? text : null}
         </Button>
       </AlertDialogTrigger>

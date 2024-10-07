@@ -2,24 +2,22 @@
 
 import { useChat } from "ai/react";
 import { Button } from "../ui/button";
-import { Loader, Loader2, Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useQuery } from "@tanstack/react-query";
-import { getChatByUrl } from "@/drizzle/action";
 import Messages from "./messages";
+import { getChatById } from "../../drizzle/action";
 
-export default function Chat({ url }: { url: string }) {
+export default function Chat({ chatId }: { chatId: string }) {
   const { data, isLoading } = useQuery({
-    queryKey: [`${url}`],
-    queryFn: () => getChatByUrl({ url }),
+    queryKey: [`${chatId}`],
+    queryFn: () => getChatById(chatId),
   });
-  let chatId = data?.id!;
   const { messages, input, handleInputChange, handleSubmit, setInput } =
     useChat({
-      body: { url, chatId },
+      body: { chatId },
       initialMessages: data?.message,
     });
-
 
   if (isLoading)
     return (

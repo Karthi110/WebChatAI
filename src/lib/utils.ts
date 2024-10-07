@@ -69,7 +69,6 @@ export const getMetadataFromUrl = async (url: string) => {
       firstImgSrc,
     };
   } catch (error) {
-    console.error(`Error fetching metadata from ${url}:`, error);
     return null;
   }
 };

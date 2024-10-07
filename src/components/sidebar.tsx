@@ -1,8 +1,8 @@
-import { getChats } from "@/drizzle/action";
 import React from "react";
 import UrlDialog from "./url-dialog";
 import Link from "next/link";
 import { Separator } from "./ui/separator";
+import { getChats } from "../drizzle/action";
 
 const Sidebar = async () => {
   const chats = await getChats();

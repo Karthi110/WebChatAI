@@ -13,14 +13,14 @@ import {
 
 const Navbar = () => {
   return (
-    <nav className="sticky h-14 inset-x-0 top-0 z-30 grainy backdrop-blur-lg transition-all border-b-2">
+    <nav className="sticky w-full h-14 inset-x-0 top-0 z-30 transition-all grainy2">
       <MaxWidthWrapper>
-        <div className="flex h-14 items-center justify-between">
+        <div className="flex h-14 items-center justify-between relative">
           <Link
             href="/"
-            className=" flex z-40 font-[700] text-2xl text-primary"
+            className=" flex z-40 font-[700] text-2xl tracking-wide text-secondary/80"
           >
-            <span>WebChatAI.</span>
+            <span>WebChatAI</span>
           </Link>
           {/* TODO:mobile nav */}
 
@@ -31,17 +31,22 @@ const Navbar = () => {
             </ClerkLoading>
             <ClerkLoaded>
               <SignedOut>
-                <Button asChild size="sm">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="grainy2 text-secondary"
+                >
                   <SignInButton
                     mode="modal"
                     fallbackRedirectUrl={"/dashboard"}
                     signUpFallbackRedirectUrl={"/auth-callback"}
                   />
                 </Button>
-                <Button variant="outline" size="sm">
+                <Button variant="outline">
                   <SignUpButton
                     mode="modal"
-                    signInFallbackRedirectUrl={"/auth-callback"}
+                    fallbackRedirectUrl={"/auth-callback"}
+                    signInFallbackRedirectUrl={"/dashboard"}
                   />
                 </Button>
               </SignedOut>
@@ -57,6 +62,7 @@ const Navbar = () => {
             </ClerkLoaded>
           </aside>
         </div>
+        <div className="wavy h-[3px] rounded-sm absolute bottom-0 inset-x-0 w-full" />
       </MaxWidthWrapper>
     </nav>
   );
