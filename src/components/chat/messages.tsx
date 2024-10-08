@@ -1,27 +1,28 @@
-import { type Message as TMessage } from "ai";
-import { MessagesSquare } from "lucide-react";
+import { useEffect, useRef } from "react";
 import Message from "./message";
+import { Message as TMessage } from "ai";
 
-interface PageProps {
-  messages: TMessage[];
-}
+const Chat = ({ messages }: { messages: TMessage[] }) => {
+  const messagesEndRef = useRef(null);
 
-const Messages = ({ messages }: PageProps) => {
+  // Function to scroll to the bottom whenever new messages are added
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom(); // Scroll to bottom on each render or message update
+  }, [messages]);
+
   return (
-    <div className="h-full w-full max-h-[calc(100vh-3.5rem-1rem-8rem)] overflow-y-auto text-start">
-      {messages.length ? (
-        messages.map((m, i) => <Message key={i} message={m} />)
-      ) : (
-        <div className="flex-1 flex flex-col items-center justify-center gap-2 h-full">
-          <MessagesSquare className="size-8 text-blue-500" />
-          <h3 className="font-semibold text-xl">Your&apos;e all set!</h3>
-          <p className="text-primary text-xs">
-            Ask your queries to get started.
-          </p>
-        </div>
-      )}
+    <div className="w-full h-[80vh] overflow-y-auto p-4">
+      {messages.map((m, index) => (
+        <Message key={index} message={m} />
+      ))}
+      {/* Invisible element to scroll into view */}
+      <div ref={messagesEndRef} />
     </div>
   );
 };
 
-export default Messages;
+export default Chat;

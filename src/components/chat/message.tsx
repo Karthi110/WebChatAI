@@ -47,5 +47,4 @@ const Message = ({ message }: PageProps) => {
     </div>
   );
 };
-
 export default Message;

@@ -1,10 +1,8 @@
-import React from "react";
 import { Viewport } from "next";
 import { ArrowRight } from "lucide-react";
 import CustomSeparator from "../components/custom-seperator";
 import Footer from "../components/footer";
 import MaxWidthWrapper from "../components/max-width-wrapper";
-import Pricing from "../components/pricing";
 import { buttonVariants } from "../components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,23 +14,26 @@ export const viewport: Viewport = {
 export default function Home() {
   return (
     <>
-      <MaxWidthWrapper classname="pt-28 sm:pt-32 flex flex-col items-center justify-center text-center grainy2">
-        <div className=" mx-auto mb-10 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-xl grainy px-7 py-2 shadow-md backdrop-blur transition-all">
-          <p className=" text-sm font-semibold text-secondary">
+      <MaxWidthWrapper classname="pt-16 sm:pt-28 lg:pt-32 flex flex-col items-center justify-center text-center grainy2">
+        <div className="mx-auto mb-6 sm:mb-8 lg:mb-10 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-xl grainy px-5 py-2 sm:px-7 shadow-md backdrop-blur transition-all">
+          <p className="text-xs sm:text-sm lg:text-base font-semibold text-secondary">
             WebChatAI is now public!
           </p>
         </div>
-        <h1 className="max-w-5xl text-5xl font-bold md:text-6xl lg:text-8xl text-secondary">
+
+        <h1 className="max-w-3xl sm:max-w-5xl text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-bold text-secondary">
           Chat with{" "}
-          <span className="grainy rounded-3xl px-4 py-2 underline decoration-from-font">
+          <span className="grainy rounded-3xl px-2 py-1 sm:px-4 sm:py-2 underline decoration-from-font">
             Webpages
           </span>{" "}
           in secs
         </h1>
-        <p className=" my-5 max-w-prose text-secondary sm:text-lg">
-          WebChatAI alows you to have conservation with any Webpages. Simply
-          copy paste the url and start asking questions right away.
+
+        <p className="my-4 sm:my-5 max-w-xs sm:max-w-prose text-xs sm:text-sm lg:text-lg text-secondary">
+          WebChatAI allows you to have conversations with any webpage. Simply
+          copy-paste the URL and start asking questions right away.
         </p>
+
         <Link
           className={buttonVariants({
             variant: "outline",
@@ -44,7 +45,8 @@ export default function Home() {
           Get started
           <ArrowRight className="size-5 ml-1" />
         </Link>
-        <div className="h-full w-full">
+
+        <div className="h-full w-full mt-8">
           <CustomSeparator />
         </div>
       </MaxWidthWrapper>
@@ -167,9 +169,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <CustomSeparator />
-
-        <Pricing />
       </div>
       <Footer />
     </>

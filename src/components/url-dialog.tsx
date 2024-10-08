@@ -110,7 +110,9 @@ const UrlDialog = ({
               <SelectGroup>
                 <SelectLabel>Loaders</SelectLabel>
                 <SelectItem value="S">Single Page</SelectItem>
-                <SelectItem value="R">Multiple Pages (paid)</SelectItem>
+                <SelectItem value="R" disabled>
+                  Multiple Pages (development)
+                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
