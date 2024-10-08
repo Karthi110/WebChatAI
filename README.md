@@ -1,17 +1,17 @@
 # WebChatAI
-## TODO
-- [✅] Get nessary API keys
-- [✅] Hook up backend for chat completion
-- [✅] Connect Drizzle orm
-- [✅] Determine schema
-- [✅] Connect Database with Neon.tech
-- [✅] Connect Auth with Clerk
-- [] create Dashboard
-- [✅] display webpage of url given using iframe
-- [✅] parse the url and embed and vectorize data
-- [✅] connect to pinecone and store vectorize data
-- [✅] feed the vectorized data to Model
-- [✅] create chat interface and stream in the messages
-- [] restrict the usuage based on tier
-- [] add stripe integration
-- [] testing
+**Use AI to summarize the website for you with just two clicks.**
+# Landing Page
+![image](https://github.com/user-attachments/assets/9a4daaf9-f201-4cb9-a394-2db58a0eb837)
+# Steps to Follow
+![image](https://github.com/user-attachments/assets/3aa86c7f-2935-422f-83e6-d92ffa60c96f)
+# Chat Interface
+![image](https://github.com/user-attachments/assets/23c868ba-fc3f-402d-a6ca-bc29b6929297)
+## get started with some simple steps
+### To run the project
+1. Clone the repo <br>
+2. Run `npm i` <br>
+3. Get Nessary keys from the .env.example file <br>
+4. `npm run dev` <br>
+
+> [!CAUTION]
+> **This is a fun project and must be only used for learning purpose only.**
