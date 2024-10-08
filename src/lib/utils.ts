@@ -87,7 +87,7 @@ export function constructMetadata({
   noIndex?: boolean;
 } = {}): Metadata {
   return {
-    metadataBase: new URL("http://localhost:3000"),
+    metadataBase: new URL("https://webchatai.vercel.app/"),
     title,
     description,
     openGraph: {
