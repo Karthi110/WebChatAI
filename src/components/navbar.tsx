@@ -38,15 +38,14 @@ const Navbar = () => {
                 >
                   <SignInButton
                     mode="modal"
-                    fallbackRedirectUrl={"/dashboard"}
-                    signUpFallbackRedirectUrl={"/auth-callback"}
+                    fallbackRedirectUrl={"/auth-callback"}
                   />
                 </Button>
                 <Button variant="outline">
                   <SignUpButton
                     mode="modal"
                     fallbackRedirectUrl={"/auth-callback"}
-                    signInFallbackRedirectUrl={"/dashboard"}
+                    
                   />
                 </Button>
               </SignedOut>
