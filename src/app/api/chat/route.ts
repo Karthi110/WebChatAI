@@ -8,7 +8,7 @@ import { pinecone, PINECONE_INDEX } from "../../../lib/pinecone";
 import { addMessage, getMessage } from "../../../drizzle/action";
 
 export async function POST(req: Request) {
-  const { messages, chatId } = await req.json();
+  const { messages, urlId,chatId } = await req.json();
 
   await addMessage({
     chatId,
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
     pineconeIndex,
-    namespace: chatId,
+    namespace: urlId,
   });
 
   const query = messages[messages.length - 1].content;
