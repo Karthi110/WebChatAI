@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import Messages from "./messages";
 import { getChatById } from "../../drizzle/action";
 
-export default function Chat({ chatId,urlId }: { chatId: string,urlId:string }) {
+export default function Chat({ chatId,urlId }: { chatId: string,urlId:string|number }) {
   const { data, isLoading } = useQuery({
     queryKey: [`${chatId}`],
     queryFn: () => getChatById(chatId),
