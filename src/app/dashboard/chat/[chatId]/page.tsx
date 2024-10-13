@@ -9,7 +9,7 @@ import {
   ResizableHandle,
 } from "../../../../components/ui/resizable";
 import UrlDialog from "../../../../components/url-dialog";
-import { getChatById } from "../../../../drizzle/action";
+import { getChatById,getUrl } from "../../../../drizzle/action";
 import Sidebar from "../../../../components/sidebar";
 
 interface PageProps {
