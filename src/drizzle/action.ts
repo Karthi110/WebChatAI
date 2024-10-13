@@ -78,7 +78,7 @@ export const vectorizeData = async ({
       // store the vectorized data into Pinecone with namespace of reconstructed url
       const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
         pineconeIndex,
-        namespace: urlId,
+        namespace: urlId as string,
       });
       // add document into the vector store
       await vectorStore.addDocuments(doc_chunk);
