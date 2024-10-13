@@ -15,7 +15,7 @@ export default function Chat({ chatId,urlId }: { chatId: string,urlId:string }) 
   });
   const { messages, input, handleInputChange, handleSubmit, setInput } =
     useChat({
-      body: { urlId },
+      body: { urlId,chatId },
       initialMessages: data?.message,
     });
 
