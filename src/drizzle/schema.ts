@@ -27,7 +27,7 @@ export const usersRelations = relations(user, ({ many }) => ({
 }));
 
 export const indexedUrls = pgTable("indexedUrls", {
-  id: serial("id").primaryKey().notNull(),
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
   url: text("url").notNull().unique(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
