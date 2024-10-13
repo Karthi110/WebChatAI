@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
     pineconeIndex,
-    namespace: urlId,
+    namespace: urlId as string,
   });
 
   const query = messages[messages.length - 1].content;
