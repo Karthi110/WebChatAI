@@ -36,7 +36,7 @@ export const vectorizeData = async ({
     const imageUrl = getRandomImage();
 
     // if found continue dont re-vectorize if not found vectorize
-    if (!isUrlAlreadyIndexed) {
+    if (isUrlAlreadyIndexed===null) {
       // add url to the indexedurls
       await createIndexedUrl({ url: fullUrl });
 
@@ -47,7 +47,7 @@ export const vectorizeData = async ({
         chatImage: imageUrl,
       });
 
-      const chatId = await getChatId({ url: fullUrl });
+      const urlId = await getUrl(fullUrl);
 
       // reconstructing url for vector namespace
       const compiledConvert = compile({ wordwrap: false }); // returns (text: string) => string;
@@ -78,7 +78,7 @@ export const vectorizeData = async ({
       // store the vectorized data into Pinecone with namespace of reconstructed url
       const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
         pineconeIndex,
-        namespace: chatId,
+        namespace: urlId,
       });
       // add document into the vector store
       await vectorStore.addDocuments(doc_chunk);
@@ -125,9 +125,9 @@ export const getUrl = async (url: string) => {
     where: eq(indexedUrls.url, url),
   });
   if (!data) {
-    return false;
+    return null;
   }
-  return true;
+  return data.id;
 };
 
 //Chat
