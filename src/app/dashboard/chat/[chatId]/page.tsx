@@ -20,6 +20,7 @@ interface PageProps {
 
 const page = async ({ params }: PageProps) => {
   const chat = await getChatById(params.chatId);
+  const urlId=await getUrl(chat.url)
   if (!chat)
     return (
       <div className="h-[calc(100vh-3.5rem)] flex items-center justify-center flex-col space-y-2">
@@ -63,7 +64,7 @@ const page = async ({ params }: PageProps) => {
       >
         <MessageNav name={chat.chatName!} chatId={chat.id} />
         <div className="max-w-xl md:max-w-2xl mx-auto h-[calc(100vh-8rem)]">
-          <Chat chatId={params.chatId} />
+          <Chat urlId={params.chatId} />
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>
