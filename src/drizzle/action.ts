@@ -48,6 +48,7 @@ export const vectorizeData = async ({
       });
 
       const urlId = await getUrl(fullUrl);
+      const chatId = await getChatId({ url: fullUrl });
 
       // reconstructing url for vector namespace
       const compiledConvert = compile({ wordwrap: false }); // returns (text: string) => string;
