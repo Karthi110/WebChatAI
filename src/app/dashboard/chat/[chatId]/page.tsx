@@ -64,7 +64,7 @@ const page = async ({ params }: PageProps) => {
       >
         <MessageNav name={chat.chatName!} chatId={chat.id} />
         <div className="max-w-xl md:max-w-2xl mx-auto h-[calc(100vh-8rem)]">
-          <Chat urlId={params.chatId} />
+          <Chat chatId={params.chatId} urlId={urlId!} />
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>
